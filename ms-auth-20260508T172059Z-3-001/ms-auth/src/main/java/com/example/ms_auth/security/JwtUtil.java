@@ -15,7 +15,6 @@ public class JwtUtil {
     // ⏱ tiempos configurables (puedes moverlos a properties si quieres)
     private final long EXPIRATION_MS = 1000 * 60 * 60;      // 1 hora
     private final long REFRESH_EXPIRATION_MS = 1000 * 60 * 60 * 24; // 24 horas
-
     public JwtUtil(@Value("${jwt.secret}") String secret) {
         this.key = Keys.hmacShaKeyFor(secret.getBytes());
     }
