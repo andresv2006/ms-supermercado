@@ -1,0 +1,12 @@
+com\example\ms_categoria\repository\CategoriaRepository.class
+com\example\ms_categoria\config\SecurityConfig.class
+com\example\ms_categoria\exception\GlobalExceptionHandler.class
+com\example\ms_categoria\dto\ApiResponse$ApiResponseBuilder.class
+com\example\ms_categoria\model\Categoria.class
+com\example\ms_categoria\security\JwtFilter.class
+com\example\ms_categoria\MsCategoriaApplication.class
+com\example\ms_categoria\security\JwtUtil.class
+com\example\ms_categoria\dto\ApiResponse.class
+com\example\ms_categoria\service\CategoriaService.class
+com\example\ms_categoria\dto\CategoriaDTO.class
+com\example\ms_categoria\controller\CategoriaController.class
