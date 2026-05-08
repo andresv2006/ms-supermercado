@@ -12,8 +12,8 @@ public class JwtUtil {
 
     private final Key key;
 
-    private final long EXPIRATION_MS = 1000 * 60 * 60;      // 1 hora
-    private final long REFRESH_EXPIRATION_MS = 1000 * 60 * 60 * 24; // 24 horas
+    private final long EXPIRATION_MS = 1000 * 60 * 60;   
+    private final long REFRESH_EXPIRATION_MS = 1000 * 60 * 60 * 24; 
     public JwtUtil(@Value("${jwt.secret}") String secret) {
         this.key = Keys.hmacShaKeyFor(secret.getBytes());
     }
