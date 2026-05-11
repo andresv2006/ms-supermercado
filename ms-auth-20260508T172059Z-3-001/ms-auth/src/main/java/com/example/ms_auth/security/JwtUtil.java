@@ -12,13 +12,13 @@ public class JwtUtil {
 
     private final Key key;
 
-    private final long EXPIRATION_MS = 1000 * 60 * 60;   
+    private final long EXPIRATION_MS = 1000 * 60 * 60;    
     private final long REFRESH_EXPIRATION_MS = 1000 * 60 * 60 * 24; 
+
     public JwtUtil(@Value("${jwt.secret}") String secret) {
         this.key = Keys.hmacShaKeyFor(secret.getBytes());
     }
 
-    
     public String generarToken(String username, String role) {
 
         return Jwts.builder()
@@ -29,6 +29,7 @@ public class JwtUtil {
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
     }
+
 
     public String generarRefreshToken(String username) {
 
@@ -50,9 +51,11 @@ public class JwtUtil {
         }
     }
 
+
     public String obtenerUsuario(String token) {
         return getClaims(token).getSubject();
     }
+
 
     public String obtenerRole(String token) {
         return getClaims(token).get("role", String.class);
@@ -70,3 +73,4 @@ public class JwtUtil {
                 .getBody();
     }
 }
+
