@@ -1,0 +1,11 @@
+D:\ms supermercado\ms-categoria\src\main\java\com\example\ms_categoria\config\SecurityConfig.java
+D:\ms supermercado\ms-categoria\src\main\java\com\example\ms_categoria\controller\CategoriaController.java
+D:\ms supermercado\ms-categoria\src\main\java\com\example\ms_categoria\dto\ApiResponse.java
+D:\ms supermercado\ms-categoria\src\main\java\com\example\ms_categoria\dto\CategoriaDTO.java
+D:\ms supermercado\ms-categoria\src\main\java\com\example\ms_categoria\exception\GlobalExceptionHandler.java
+D:\ms supermercado\ms-categoria\src\main\java\com\example\ms_categoria\model\Categoria.java
+D:\ms supermercado\ms-categoria\src\main\java\com\example\ms_categoria\MsCategoriaApplication.java
+D:\ms supermercado\ms-categoria\src\main\java\com\example\ms_categoria\repository\CategoriaRepository.java
+D:\ms supermercado\ms-categoria\src\main\java\com\example\ms_categoria\security\JwtFilter.java
+D:\ms supermercado\ms-categoria\src\main\java\com\example\ms_categoria\security\JwtUtil.java
+D:\ms supermercado\ms-categoria\src\main\java\com\example\ms_categoria\service\CategoriaService.java
