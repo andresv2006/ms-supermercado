@@ -1,7 +1,13 @@
+D:\Descargas 2\ms usper\ms-supermercado\ms-producto\src\main\java\com\example\ms_producto\client\CategoriaClient.java
 D:\Descargas 2\ms usper\ms-supermercado\ms-producto\src\main\java\com\example\ms_producto\config\SecurityConfig.java
+D:\Descargas 2\ms usper\ms-supermercado\ms-producto\src\main\java\com\example\ms_producto\config\WebClientConfig.java
 D:\Descargas 2\ms usper\ms-supermercado\ms-producto\src\main\java\com\example\ms_producto\controller\ProductoController.java
-D:\Descargas 2\ms usper\ms-supermercado\ms-producto\src\main\java\com\example\ms_producto\model\Productos.java
+D:\Descargas 2\ms usper\ms-supermercado\ms-producto\src\main\java\com\example\ms_producto\dto\ApiResponse.java
+D:\Descargas 2\ms usper\ms-supermercado\ms-producto\src\main\java\com\example\ms_producto\dto\ProductoDTO.java
+D:\Descargas 2\ms usper\ms-supermercado\ms-producto\src\main\java\com\example\ms_producto\exception\GlobalExceptionHandler.java
+D:\Descargas 2\ms usper\ms-supermercado\ms-producto\src\main\java\com\example\ms_producto\model\Producto.java
 D:\Descargas 2\ms usper\ms-supermercado\ms-producto\src\main\java\com\example\ms_producto\MsProductoApplication.java
+D:\Descargas 2\ms usper\ms-supermercado\ms-producto\src\main\java\com\example\ms_producto\repository\ProductoRepository.java
 D:\Descargas 2\ms usper\ms-supermercado\ms-producto\src\main\java\com\example\ms_producto\security\JwtFilter.java
 D:\Descargas 2\ms usper\ms-supermercado\ms-producto\src\main\java\com\example\ms_producto\security\JwtUtil.java
 D:\Descargas 2\ms usper\ms-supermercado\ms-producto\src\main\java\com\example\ms_producto\service\ProductoService.java

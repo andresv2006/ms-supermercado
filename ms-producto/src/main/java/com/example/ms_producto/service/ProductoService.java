@@ -1,11 +1,14 @@
 package com.example.ms_producto.service;
 
 import java.util.List;
+
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import com.example.ms_producto.dto.ApiResponse;
 import com.example.ms_producto.dto.ProductoDTO;
 import com.example.ms_producto.model.Producto;
 import com.example.ms_producto.repository.ProductoRepository;
@@ -57,7 +60,7 @@ public class ProductoService {
         return repo.save(item);
     }
 
-    public void eliminar(Long id) {
+    public ResponseEntity<ApiResponse<Void>> eliminar(Long id) {
         // Al llamar a obtener(id) primero, te aseguras de que lance la excepción 
         // si no existe, lo cual es una excelente práctica.
         repo.delete(obtener(id));

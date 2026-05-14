@@ -1,0 +1,16 @@
+com\example\ms_producto\dto\ApiResponse.class
+com\example\ms_producto\client\CategoriaClient.class
+com\example\ms_producto\security\JwtUtil.class
+com\example\ms_producto\model\Producto$ProductoBuilder.class
+com\example\ms_producto\dto\ProductoDTO.class
+com\example\ms_producto\security\JwtFilter.class
+com\example\ms_producto\model\Producto.class
+com\example\ms_producto\MsProductoApplication.class
+com\example\ms_producto\config\WebClientConfig.class
+com\example\ms_producto\config\SecurityConfig.class
+com\example\ms_producto\exception\GlobalExceptionHandler.class
+com\example\ms_producto\repository\ProductoRepository.class
+com\example\ms_producto\dto\ApiResponse$ApiResponseBuilder.class
+com\example\ms_producto\controller\ProductoController.class
+com\example\ms_producto\service\ProductoService.class
+com\example\ms_producto\client\CategoriaClient$1.class
