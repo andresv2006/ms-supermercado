@@ -62,6 +62,17 @@ public class InventarioController {
         );
     }
 
+    @GetMapping("/producto/{productoId}")
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    public ResponseEntity<ApiResponse<Inventario>> obtenerPorProducto(@PathVariable Long productoId) {
+        return ResponseEntity.ok(
+                ApiResponse.<Inventario>builder()
+                        .success(true)
+                        .data(service.obtenerPorProducto(productoId))
+                        .build()
+        );
+    }
+
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<Inventario>> actualizar(
