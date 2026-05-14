@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.example.ms_inventario.dto.InventarioDTO;
 import com.example.ms_inventario.model.Inventario;
 import com.example.ms_inventario.repository.InventarioRepository;
 
@@ -15,6 +16,16 @@ import lombok.RequiredArgsConstructor;
 public class InventarioService {
 
     private final InventarioRepository repo;
+
+    public Inventario crear(InventarioDTO dto) {
+        return repo.save(new Inventario(
+                null,
+                dto.getProductoId(),
+                dto.getCantidad(),
+                dto.getStockMinimo(),
+                dto.getUbicacion()
+        ));
+    }
 
     public List<Inventario> listar() {
         return repo.findAll();
