@@ -60,9 +60,7 @@ public class ProductoService {
         return repo.save(item);
     }
 
-    public ResponseEntity<ApiResponse<Void>> eliminar(Long id) {
-        // Al llamar a obtener(id) primero, te aseguras de que lance la excepción 
-        // si no existe, lo cual es una excelente práctica.
+    public void eliminar(Long id) {
         repo.delete(obtener(id));
     }
 
