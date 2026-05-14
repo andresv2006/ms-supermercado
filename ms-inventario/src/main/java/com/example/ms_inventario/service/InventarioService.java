@@ -46,4 +46,8 @@ public class InventarioService {
 
         return repo.save(item);
     }
+
+    public void eliminar(Long id) {
+        repo.delete(obtener(id));
+    }
 }
