@@ -37,6 +37,10 @@ public class PagoService {
         );
     }
 
+    public List<Pago> listarPorPedido(Long pedidoId) {
+        return repo.findByPedidoId(pedidoId);
+    }
+
     public Pago actualizar(Long id, PagoDTO dto) {
         Pago item = obtener(id);
         item.setPedidoId(dto.getPedidoId());

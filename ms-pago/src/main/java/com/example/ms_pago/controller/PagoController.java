@@ -62,6 +62,17 @@ public class PagoController {
         );
     }
 
+    @GetMapping("/pedido/{pedidoId}")
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    public ResponseEntity<ApiResponse<List<Pago>>> listarPorPedido(@PathVariable Long pedidoId) {
+        return ResponseEntity.ok(
+                ApiResponse.<List<Pago>>builder()
+                        .success(true)
+                        .data(service.listarPorPedido(pedidoId))
+                        .build()
+        );
+    }
+
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<Pago>> actualizar(
