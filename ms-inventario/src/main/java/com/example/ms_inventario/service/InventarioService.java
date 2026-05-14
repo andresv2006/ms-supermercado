@@ -18,6 +18,11 @@ public class InventarioService {
     private final InventarioRepository repo;
 
     public Inventario crear(InventarioDTO dto) {
+        repo.findByProductoId(dto.getProductoId())
+                .ifPresent(existing -> {
+                    throw new IllegalArgumentException("El producto ya tiene inventario registrado");
+                });
+
         return repo.save(new Inventario(
                 null,
                 dto.getProductoId(),
