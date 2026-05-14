@@ -98,6 +98,18 @@ public class PagoController {
         );
     }
 
+    @PutMapping("/{id}/rechazar")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ApiResponse<Pago>> rechazar(@PathVariable Long id) {
+        return ResponseEntity.ok(
+                ApiResponse.<Pago>builder()
+                        .success(true)
+                        .message("Pago rechazado")
+                        .data(service.rechazar(id))
+                        .build()
+        );
+    }
+
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<Void>> eliminar(@PathVariable Long id) {

@@ -57,6 +57,12 @@ public class PagoService {
         return repo.save(item);
     }
 
+    public Pago rechazar(Long id) {
+        Pago item = obtener(id);
+        item.setEstado("RECHAZADO");
+        return repo.save(item);
+    }
+
     public void eliminar(Long id) {
         repo.delete(obtener(id));
     }
