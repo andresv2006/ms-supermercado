@@ -1,7 +1,5 @@
 package com.example.ms_inventario.security;
 
-import static net.logstash.logback.argument.StructuredArguments.keyValue;
-
 import java.io.IOException;
 import java.util.List;
 
@@ -22,26 +20,46 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 @RequiredArgsConstructor
 public class JwtFilter extends OncePerRequestFilter {
+
     private final JwtUtil jwtUtil;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain chain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest req,
+                                    HttpServletResponse res,
+                                    FilterChain chain)
+            throws ServletException, IOException {
+
         String header = req.getHeader("Authorization");
-        if (header != null && header.startsWith("Bearer ") && SecurityContextHolder.getContext().getAuthentication() == null) {
+
+        if (header != null && header.startsWith("Bearer ")) {
+
             String token = header.substring(7);
-            if (jwtUtil.esValido(token)) {
-                String user = jwtUtil.obtenerUsuario(token);
-                String role = jwtUtil.obtenerRole(token);
-                var auth = new UsernamePasswordAuthenticationToken(user, null, List.of(new SimpleGrantedAuthority(role)));
-                SecurityContextHolder.getContext().setAuthentication(auth);
-                log.info("Usuario autenticado", keyValue("user", user), keyValue("role", role));
-            } else {
-                res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                res.setContentType("application/json");
-                res.getWriter().write("{\"error\":\"Token invalido\"}");
-                return;
+
+            if (SecurityContextHolder.getContext().getAuthentication() == null) {
+
+                if (jwtUtil.esValido(token)) {
+
+                    String user = jwtUtil.obtenerUsuario(token);
+                    String role = jwtUtil.obtenerRole(token);
+
+                    var auth = new UsernamePasswordAuthenticationToken(
+                            user,
+                            null,
+                            List.of(new SimpleGrantedAuthority(role))
+                    );
+
+                    SecurityContextHolder.getContext().setAuthentication(auth);
+                } else {
+                    log.warn("Token invalido");
+
+                    res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                    res.setContentType("application/json");
+                    res.getWriter().write("{\"error\":\"Token invalido\"}");
+                    return;
+                }
             }
         }
+
         chain.doFilter(req, res);
     }
 }

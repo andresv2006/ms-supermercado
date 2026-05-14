@@ -30,9 +30,9 @@ public class GlobalExceptionHandler {
         );
     }
 
-    @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<ApiResponse<Object>> handleRuntime(RuntimeException ex) {
-        return ResponseEntity.status(400).body(
+    @ExceptionHandler(jakarta.persistence.EntityNotFoundException.class)
+    public ResponseEntity<ApiResponse<Object>> handle404(Exception ex) {
+        return ResponseEntity.status(404).body(
                 ApiResponse.builder()
                         .success(false)
                         .message(ex.getMessage())
@@ -40,9 +40,19 @@ public class GlobalExceptionHandler {
         );
     }
 
-    @ExceptionHandler(jakarta.persistence.EntityNotFoundException.class)
-    public ResponseEntity<ApiResponse<Object>> handle404(Exception ex) {
-        return ResponseEntity.status(404).body(
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ApiResponse<Object>> handleBusiness(IllegalArgumentException ex) {
+        return ResponseEntity.badRequest().body(
+                ApiResponse.builder()
+                        .success(false)
+                        .message(ex.getMessage())
+                        .build()
+        );
+    }
+
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<ApiResponse<Object>> handleRuntime(RuntimeException ex) {
+        return ResponseEntity.status(400).body(
                 ApiResponse.builder()
                         .success(false)
                         .message(ex.getMessage())
