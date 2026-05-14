@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -28,6 +29,17 @@ public class InventarioController {
                 ApiResponse.<List<Inventario>>builder()
                         .success(true)
                         .data(service.listar())
+                        .build()
+        );
+    }
+
+    @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    public ResponseEntity<ApiResponse<Inventario>> obtener(@PathVariable Long id) {
+        return ResponseEntity.ok(
+                ApiResponse.<Inventario>builder()
+                        .success(true)
+                        .data(service.obtener(id))
                         .build()
         );
     }
