@@ -1,0 +1,53 @@
+package com.example.ms_pago.service;
+
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
+import com.example.ms_pago.dto.PagoDTO;
+import com.example.ms_pago.model.Pago;
+import com.example.ms_pago.repository.PagoRepository;
+
+import jakarta.persistence.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
+
+@Service
+@RequiredArgsConstructor
+public class PagoService {
+
+    private final PagoRepository repo;
+
+    public Pago crear(PagoDTO dto) {
+        return repo.save(new Pago(
+                null,
+                dto.getPedidoId(),
+                dto.getMetodoPago(),
+                dto.getMonto(),
+                dto.getEstado()
+        ));
+    }
+
+    public List<Pago> listar() {
+        return repo.findAll();
+    }
+
+    public Pago obtener(Long id) {
+        return repo.findById(id).orElseThrow(() ->
+                new EntityNotFoundException("Pago no encontrado")
+        );
+    }
+
+    public Pago actualizar(Long id, PagoDTO dto) {
+        Pago item = obtener(id);
+        item.setPedidoId(dto.getPedidoId());
+        item.setMetodoPago(dto.getMetodoPago());
+        item.setMonto(dto.getMonto());
+        item.setEstado(dto.getEstado());
+
+        return repo.save(item);
+    }
+
+    public void eliminar(Long id) {
+        repo.delete(obtener(id));
+    }
+}
