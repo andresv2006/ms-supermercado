@@ -86,6 +86,18 @@ public class PagoController {
         );
     }
 
+    @PutMapping("/{id}/aprobar")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ApiResponse<Pago>> aprobar(@PathVariable Long id) {
+        return ResponseEntity.ok(
+                ApiResponse.<Pago>builder()
+                        .success(true)
+                        .message("Pago aprobado")
+                        .data(service.aprobar(id))
+                        .build()
+        );
+    }
+
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<Void>> eliminar(@PathVariable Long id) {

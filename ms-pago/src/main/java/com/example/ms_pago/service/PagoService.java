@@ -51,6 +51,12 @@ public class PagoService {
         return repo.save(item);
     }
 
+    public Pago aprobar(Long id) {
+        Pago item = obtener(id);
+        item.setEstado("APROBADO");
+        return repo.save(item);
+    }
+
     public void eliminar(Long id) {
         repo.delete(obtener(id));
     }
