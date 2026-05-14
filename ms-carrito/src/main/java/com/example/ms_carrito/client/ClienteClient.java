@@ -1,5 +1,6 @@
 package com.example.ms_carrito.client;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -14,12 +15,14 @@ import lombok.RequiredArgsConstructor;
 public class ClienteClient {
 
     private final WebClient webClient;
-    private static final String BASE_URL = "http://localhost:8083/api/clientes/";
+
+    @Value("${cliente.service.url}")
+    private String baseUrl;
 
     public Object obtener(Long id, String token) {
         try {
             ApiResponse<Object> response = webClient.get()
-                    .uri(BASE_URL + id)
+                    .uri(baseUrl + id)
                     .header("Authorization", token)
                     .retrieve()
                     .bodyToMono(new ParameterizedTypeReference<ApiResponse<Object>>() {})
