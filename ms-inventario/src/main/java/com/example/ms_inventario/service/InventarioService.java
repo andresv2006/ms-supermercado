@@ -36,4 +36,14 @@ public class InventarioService {
                 new EntityNotFoundException("Inventario no encontrado")
         );
     }
+
+    public Inventario actualizar(Long id, InventarioDTO dto) {
+        Inventario item = obtener(id);
+        item.setProductoId(dto.getProductoId());
+        item.setCantidad(dto.getCantidad());
+        item.setStockMinimo(dto.getStockMinimo());
+        item.setUbicacion(dto.getUbicacion());
+
+        return repo.save(item);
+    }
 }
