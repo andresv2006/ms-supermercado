@@ -66,6 +66,35 @@ public class CarritoService {
                 .orElseThrow(() -> new EntityNotFoundException("Carrito no encontrado"));
     }
 
+    public Carrito actualizar(Long id, CarritoDTO dto, String token) {
+        validarCliente(dto.getClienteId(), token);
+
+        Carrito carrito = obtener(id);
+        carrito.setClienteId(dto.getClienteId());
+        carrito.setEstado(dto.getEstado());
+        carrito.getItems().clear();
+
+        BigDecimal total = BigDecimal.ZERO;
+
+        for (CarritoItemDTO itemDTO : dto.getItems()) {
+            validarProducto(itemDTO.getProductoId(), token);
+
+            CarritoItem item = new CarritoItem(
+                    null,
+                    itemDTO.getProductoId(),
+                    itemDTO.getCantidad(),
+                    itemDTO.getPrecioUnitario(),
+                    carrito
+            );
+
+            carrito.getItems().add(item);
+            total = total.add(itemDTO.getPrecioUnitario().multiply(BigDecimal.valueOf(itemDTO.getCantidad())));
+        }
+
+        carrito.setTotal(total);
+        return repo.save(carrito);
+    }
+
     public void eliminar(Long id) {
         repo.delete(obtener(id));
     }
