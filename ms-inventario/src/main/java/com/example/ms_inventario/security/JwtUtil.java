@@ -1,4 +1,4 @@
-package com.example.ms_producto.security;
+package com.example.ms_inventario.security;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;

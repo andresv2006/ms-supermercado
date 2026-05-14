@@ -1,4 +1,4 @@
-package com.example.ms_categoria.security;
+package com.example.ms_empleado.security;
 
 import static net.logstash.logback.argument.StructuredArguments.keyValue;
 
