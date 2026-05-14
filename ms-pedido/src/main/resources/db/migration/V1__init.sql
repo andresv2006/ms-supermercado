@@ -1,7 +1,6 @@
 create table pedido (
     id bigint not null auto_increment,
     cliente_id bigint not null,
-    promocion_id bigint,
     estado varchar(30) not null,
     total decimal(12,2) not null,
     primary key (id)

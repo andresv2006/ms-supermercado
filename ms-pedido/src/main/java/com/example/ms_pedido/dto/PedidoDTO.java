@@ -21,9 +21,6 @@ public class PedidoDTO {
     @NotNull(message = "El ID del cliente es obligatorio")
     private Long clienteId;
 
-    // promocionId parece ser opcional, por lo que no lleva validaciones
-    private Long promocionId;
-
     @NotBlank(message = "El estado del pedido es obligatorio y no puede estar en blanco")
     private String estado;
 

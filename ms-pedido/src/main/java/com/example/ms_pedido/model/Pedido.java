@@ -25,8 +25,6 @@ public class Pedido {
     @Column(nullable = false)
     private Long clienteId;
 
-    private Long promocionId;
-
     @Column(nullable = false)
     private String estado;
 
@@ -36,7 +34,6 @@ public class Pedido {
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PedidoDetalle> detalles = new ArrayList<>();
 
-    // Métodos utilitarios para mantener la relación bidireccional sincronizada
     public void addDetalle(PedidoDetalle detalle) {
         detalles.add(detalle);
         detalle.setPedido(this);

@@ -27,12 +27,10 @@ public class ClienteClient {
             return response != null ? response.getData() : null;
 
         } catch (WebClientResponseException e) {
-            // Captura errores HTTP (ej: 404, 500)
             System.err.println("Error al obtener cliente HTTP " + e.getStatusCode());
             return null;
         } catch (Exception e) {
-            // Captura errores de conexión (ej: el microservicio está apagado)
-            System.err.println("Error de conexión con el ms-cliente: " + e.getMessage());
+            System.err.println("Error de conexion con el ms-cliente: " + e.getMessage());
             return null;
         }
     }
