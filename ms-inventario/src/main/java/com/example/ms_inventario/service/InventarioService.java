@@ -18,6 +18,11 @@ public class InventarioService {
     private final InventarioRepository repo;
 
     public Inventario crear(InventarioDTO dto) {
+        repo.findByProductoId(dto.getProductoId())
+                .ifPresent(existing -> {
+                    throw new IllegalArgumentException("El producto ya tiene inventario registrado");
+                });
+
         return repo.save(new Inventario(
                 null,
                 dto.getProductoId(),
@@ -34,6 +39,12 @@ public class InventarioService {
     public Inventario obtener(Long id) {
         return repo.findById(id).orElseThrow(() ->
                 new EntityNotFoundException("Inventario no encontrado")
+        );
+    }
+
+    public Inventario obtenerPorProducto(Long productoId) {
+        return repo.findByProductoId(productoId).orElseThrow(() ->
+                new EntityNotFoundException("Inventario no encontrado para el producto")
         );
     }
 
