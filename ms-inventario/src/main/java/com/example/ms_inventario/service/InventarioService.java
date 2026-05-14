@@ -37,6 +37,12 @@ public class InventarioService {
         );
     }
 
+    public Inventario obtenerPorProducto(Long productoId) {
+        return repo.findByProductoId(productoId).orElseThrow(() ->
+                new EntityNotFoundException("Inventario no encontrado para el producto")
+        );
+    }
+
     public Inventario actualizar(Long id, InventarioDTO dto) {
         Inventario item = obtener(id);
         item.setProductoId(dto.getProductoId());
