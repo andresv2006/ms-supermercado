@@ -22,7 +22,6 @@ public class JwtUtil {
         this.key = Keys.hmacShaKeyFor(secret.getBytes());
     }
 
-    // ðŸ” GENERAR ACCESS TOKEN
     public String generarToken(String username, String role) {
 
         return Jwts.builder()
@@ -34,7 +33,6 @@ public class JwtUtil {
                 .compact();
     }
 
-    // ðŸ”„ GENERAR REFRESH TOKEN
     public String generarRefreshToken(String username) {
 
         return Jwts.builder()
@@ -46,7 +44,6 @@ public class JwtUtil {
                 .compact();
     }
 
-    // âœ… VALIDAR TOKEN
     public boolean esValido(String token) {
         try {
             Claims claims = getClaims(token);
@@ -56,22 +53,18 @@ public class JwtUtil {
         }
     }
 
-    // ðŸ‘¤ OBTENER USUARIO
     public String obtenerUsuario(String token) {
         return getClaims(token).getSubject();
     }
 
-    // ðŸ” OBTENER ROLE
     public String obtenerRole(String token) {
         return getClaims(token).get("role", String.class);
     }
 
-    // ðŸ”„ VALIDAR SI ES REFRESH TOKEN
     public boolean esRefreshToken(String token) {
         return "refresh".equals(getClaims(token).get("type"));
     }
 
-    // ðŸ” EXTRAER CLAIMS
     private Claims getClaims(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(key)

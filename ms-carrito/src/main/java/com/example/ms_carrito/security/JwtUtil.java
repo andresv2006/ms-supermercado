@@ -1,28 +1,27 @@
-package com.example.ms_producto.security;
-
-import io.jsonwebtoken.*;
-import io.jsonwebtoken.security.Keys;
-
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+package com.example.ms_carrito.security;
 
 import java.security.Key;
 import java.util.Date;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
+
 @Component
 public class JwtUtil {
-
     private final Key key;
 
-    // â± tiempos configurables (puedes moverlos a properties si quieres)
-    private final long EXPIRATION_MS = 1000 * 60 * 60;      // 1 hora
-    private final long REFRESH_EXPIRATION_MS = 1000 * 60 * 60 * 24; // 24 horas
+    private final long EXPIRATION_MS = 1000 * 60 * 60; 
+    private final long REFRESH_EXPIRATION_MS = 1000 * 60 * 60 * 24; 
 
     public JwtUtil(@Value("${jwt.secret}") String secret) {
         this.key = Keys.hmacShaKeyFor(secret.getBytes());
     }
 
-    // ðŸ” GENERAR ACCESS TOKEN
     public String generarToken(String username, String role) {
 
         return Jwts.builder()
@@ -34,7 +33,6 @@ public class JwtUtil {
                 .compact();
     }
 
-    // ðŸ”„ GENERAR REFRESH TOKEN
     public String generarRefreshToken(String username) {
 
         return Jwts.builder()
@@ -45,8 +43,6 @@ public class JwtUtil {
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
     }
-
-    // âœ… VALIDAR TOKEN
     public boolean esValido(String token) {
         try {
             Claims claims = getClaims(token);
@@ -55,23 +51,17 @@ public class JwtUtil {
             return false;
         }
     }
-
-    // ðŸ‘¤ OBTENER USUARIO
     public String obtenerUsuario(String token) {
         return getClaims(token).getSubject();
     }
 
-    // ðŸ” OBTENER ROLE
     public String obtenerRole(String token) {
         return getClaims(token).get("role", String.class);
     }
 
-    // ðŸ”„ VALIDAR SI ES REFRESH TOKEN
     public boolean esRefreshToken(String token) {
         return "refresh".equals(getClaims(token).get("type"));
     }
-
-    // ðŸ” EXTRAER CLAIMS
     private Claims getClaims(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(key)
