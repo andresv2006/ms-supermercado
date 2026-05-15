@@ -55,6 +55,12 @@ public class DevolucionService {
         return repo.save(item);
     }
 
+    public Devolucion aprobar(Long id) {
+        Devolucion item = obtener(id);
+        item.setEstado("APROBADA");
+        return repo.save(item);
+    }
+
     public void eliminar(Long id) {
         repo.delete(obtener(id));
     }

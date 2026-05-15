@@ -97,6 +97,18 @@ public class DevolucionController {
         );
     }
 
+    @PutMapping("/{id}/aprobar")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ApiResponse<Devolucion>> aprobar(@PathVariable Long id) {
+        return ResponseEntity.ok(
+                ApiResponse.<Devolucion>builder()
+                        .success(true)
+                        .message("Devolucion aprobada")
+                        .data(service.aprobar(id))
+                        .build()
+        );
+    }
+
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<Void>> eliminar(@PathVariable Long id) {
