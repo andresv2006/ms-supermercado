@@ -1,6 +1,7 @@
 package com.example.ms_devolucion.service;
 
 import java.util.List;
+import java.util.Locale;
 
 import org.springframework.stereotype.Service;
 
@@ -18,12 +19,14 @@ public class DevolucionService {
     private final DevolucionRepository repo;
 
     public Devolucion crear(DevolucionDTO dto) {
+        String estado = normalizarEstado(dto.getEstado());
+
         return repo.save(new Devolucion(
                 null,
                 dto.getPedidoId(),
                 dto.getPagoId(),
                 dto.getMotivo(),
-                dto.getEstado()
+                estado
         ));
     }
 
@@ -50,7 +53,7 @@ public class DevolucionService {
         item.setPedidoId(dto.getPedidoId());
         item.setPagoId(dto.getPagoId());
         item.setMotivo(dto.getMotivo());
-        item.setEstado(dto.getEstado());
+        item.setEstado(normalizarEstado(dto.getEstado()));
 
         return repo.save(item);
     }
@@ -69,5 +72,16 @@ public class DevolucionService {
 
     public void eliminar(Long id) {
         repo.delete(obtener(id));
+    }
+
+    private String normalizarEstado(String estado) {
+        String estadoNormalizado = estado.trim().toUpperCase(Locale.ROOT);
+        if (!estadoNormalizado.equals("SOLICITADA")
+                && !estadoNormalizado.equals("APROBADA")
+                && !estadoNormalizado.equals("RECHAZADA")) {
+            throw new IllegalArgumentException("Estado de devolucion no permitido");
+        }
+
+        return estadoNormalizado;
     }
 }
