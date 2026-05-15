@@ -55,6 +55,8 @@ public class CategoriaService {
     }
 
     private void validarReglas(CategoriaDTO dto) {
-        // Espacio para reglas de negocio del servicio. 
+        if (dto.getNombre().trim().length() < 3) {
+            throw new IllegalArgumentException("El nombre de la categoria debe tener al menos 3 caracteres");
+        }
     }
 }

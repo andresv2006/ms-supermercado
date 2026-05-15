@@ -16,7 +16,7 @@ public class Producto {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(nullable = false, unique = true)
-    private String sku; // digito verificador especial
+    private String sku;
     @Column(nullable = false)
     private String nombre;
     @Column(nullable = false)
