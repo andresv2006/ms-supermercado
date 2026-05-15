@@ -62,6 +62,17 @@ public class DevolucionController {
         );
     }
 
+    @GetMapping("/pedido/{pedidoId}")
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    public ResponseEntity<ApiResponse<List<Devolucion>>> listarPorPedido(@PathVariable Long pedidoId) {
+        return ResponseEntity.ok(
+                ApiResponse.<List<Devolucion>>builder()
+                        .success(true)
+                        .data(service.listarPorPedido(pedidoId))
+                        .build()
+        );
+    }
+
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<Devolucion>> actualizar(

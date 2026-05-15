@@ -37,6 +37,10 @@ public class DevolucionService {
         );
     }
 
+    public List<Devolucion> listarPorPedido(Long pedidoId) {
+        return repo.findByPedidoId(pedidoId);
+    }
+
     public Devolucion actualizar(Long id, DevolucionDTO dto) {
         Devolucion item = obtener(id);
         item.setPedidoId(dto.getPedidoId());
