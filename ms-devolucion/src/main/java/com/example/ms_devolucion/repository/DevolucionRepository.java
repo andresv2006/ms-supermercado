@@ -11,4 +11,5 @@ import com.example.ms_devolucion.model.Devolucion;
 public interface DevolucionRepository extends JpaRepository<Devolucion, Long> {
 
     List<Devolucion> findByPedidoId(Long pedidoId);
+    List<Devolucion> findByPagoId(Long pagoId);
 }

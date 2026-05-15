@@ -41,6 +41,10 @@ public class DevolucionService {
         return repo.findByPedidoId(pedidoId);
     }
 
+    public List<Devolucion> listarPorPago(Long pagoId) {
+        return repo.findByPagoId(pagoId);
+    }
+
     public Devolucion actualizar(Long id, DevolucionDTO dto) {
         Devolucion item = obtener(id);
         item.setPedidoId(dto.getPedidoId());
