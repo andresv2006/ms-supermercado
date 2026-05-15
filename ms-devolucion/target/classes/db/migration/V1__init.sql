@@ -6,3 +6,9 @@ create table devolucion (
     estado varchar(30) not null,
     primary key (id)
 );
+
+insert into devolucion (pedido_id, pago_id, motivo, estado)
+values (1, 1, 'Producto danado', 'SOLICITADA');
+
+insert into devolucion (pedido_id, pago_id, motivo, estado)
+values (2, 2, 'Cambio solicitado por cliente', 'APROBADA');
