@@ -1,4 +1,4 @@
-package com.example.ms_pago.controller;
+package com.example.ms_devolucion.controller;
 
 import java.util.List;
 
@@ -13,28 +13,28 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.ms_pago.dto.ApiResponse;
-import com.example.ms_pago.dto.PagoDTO;
-import com.example.ms_pago.model.Pago;
-import com.example.ms_pago.service.PagoService;
+import com.example.ms_devolucion.dto.ApiResponse;
+import com.example.ms_devolucion.dto.DevolucionDTO;
+import com.example.ms_devolucion.model.Devolucion;
+import com.example.ms_devolucion.service.DevolucionService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/api/pagos")
+@RequestMapping("/api/devoluciones")
 @RequiredArgsConstructor
-public class PagoController {
+public class DevolucionController {
 
-    private final PagoService service;
+    private final DevolucionService service;
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ApiResponse<Pago>> crear(@Valid @RequestBody PagoDTO dto) {
+    public ResponseEntity<ApiResponse<Devolucion>> crear(@Valid @RequestBody DevolucionDTO dto) {
         return ResponseEntity.status(201).body(
-                ApiResponse.<Pago>builder()
+                ApiResponse.<Devolucion>builder()
                         .success(true)
-                        .message("Pago creado")
+                        .message("Devolucion creada")
                         .data(service.crear(dto))
                         .build()
         );
@@ -42,9 +42,9 @@ public class PagoController {
 
     @GetMapping
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
-    public ResponseEntity<ApiResponse<List<Pago>>> listar() {
+    public ResponseEntity<ApiResponse<List<Devolucion>>> listar() {
         return ResponseEntity.ok(
-                ApiResponse.<List<Pago>>builder()
+                ApiResponse.<List<Devolucion>>builder()
                         .success(true)
                         .data(service.listar())
                         .build()
@@ -53,9 +53,9 @@ public class PagoController {
 
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
-    public ResponseEntity<ApiResponse<Pago>> obtener(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<Devolucion>> obtener(@PathVariable Long id) {
         return ResponseEntity.ok(
-                ApiResponse.<Pago>builder()
+                ApiResponse.<Devolucion>builder()
                         .success(true)
                         .data(service.obtener(id))
                         .build()
@@ -64,22 +64,33 @@ public class PagoController {
 
     @GetMapping("/pedido/{pedidoId}")
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
-    public ResponseEntity<ApiResponse<List<Pago>>> listarPorPedido(@PathVariable Long pedidoId) {
+    public ResponseEntity<ApiResponse<List<Devolucion>>> listarPorPedido(@PathVariable Long pedidoId) {
         return ResponseEntity.ok(
-                ApiResponse.<List<Pago>>builder()
+                ApiResponse.<List<Devolucion>>builder()
                         .success(true)
                         .data(service.listarPorPedido(pedidoId))
                         .build()
         );
     }
 
+    @GetMapping("/pago/{pagoId}")
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    public ResponseEntity<ApiResponse<List<Devolucion>>> listarPorPago(@PathVariable Long pagoId) {
+        return ResponseEntity.ok(
+                ApiResponse.<List<Devolucion>>builder()
+                        .success(true)
+                        .data(service.listarPorPago(pagoId))
+                        .build()
+        );
+    }
+
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ApiResponse<Pago>> actualizar(
+    public ResponseEntity<ApiResponse<Devolucion>> actualizar(
             @PathVariable Long id,
-            @Valid @RequestBody PagoDTO dto) {
+            @Valid @RequestBody DevolucionDTO dto) {
         return ResponseEntity.ok(
-                ApiResponse.<Pago>builder()
+                ApiResponse.<Devolucion>builder()
                         .success(true)
                         .data(service.actualizar(id, dto))
                         .build()
@@ -88,11 +99,11 @@ public class PagoController {
 
     @PutMapping("/{id}/aprobar")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ApiResponse<Pago>> aprobar(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<Devolucion>> aprobar(@PathVariable Long id) {
         return ResponseEntity.ok(
-                ApiResponse.<Pago>builder()
+                ApiResponse.<Devolucion>builder()
                         .success(true)
-                        .message("Pago aprobado")
+                        .message("Devolucion aprobada")
                         .data(service.aprobar(id))
                         .build()
         );
@@ -100,11 +111,11 @@ public class PagoController {
 
     @PutMapping("/{id}/rechazar")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ApiResponse<Pago>> rechazar(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<Devolucion>> rechazar(@PathVariable Long id) {
         return ResponseEntity.ok(
-                ApiResponse.<Pago>builder()
+                ApiResponse.<Devolucion>builder()
                         .success(true)
-                        .message("Pago rechazado")
+                        .message("Devolucion rechazada")
                         .data(service.rechazar(id))
                         .build()
         );
@@ -117,7 +128,7 @@ public class PagoController {
         return ResponseEntity.ok(
                 ApiResponse.<Void>builder()
                         .success(true)
-                        .message("Pago eliminado")
+                        .message("Devolucion eliminada")
                         .build()
         );
     }

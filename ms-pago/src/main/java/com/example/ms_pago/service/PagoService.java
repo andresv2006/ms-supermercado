@@ -1,6 +1,7 @@
 package com.example.ms_pago.service;
 
 import java.util.List;
+import java.util.Locale;
 
 import org.springframework.stereotype.Service;
 
@@ -18,12 +19,14 @@ public class PagoService {
     private final PagoRepository repo;
 
     public Pago crear(PagoDTO dto) {
+        String estado = normalizarEstado(dto.getEstado());
+
         return repo.save(new Pago(
                 null,
                 dto.getPedidoId(),
                 dto.getMetodoPago(),
                 dto.getMonto(),
-                dto.getEstado()
+                estado
         ));
     }
 
@@ -46,7 +49,7 @@ public class PagoService {
         item.setPedidoId(dto.getPedidoId());
         item.setMetodoPago(dto.getMetodoPago());
         item.setMonto(dto.getMonto());
-        item.setEstado(dto.getEstado());
+        item.setEstado(normalizarEstado(dto.getEstado()));
 
         return repo.save(item);
     }
@@ -57,7 +60,24 @@ public class PagoService {
         return repo.save(item);
     }
 
+    public Pago rechazar(Long id) {
+        Pago item = obtener(id);
+        item.setEstado("RECHAZADO");
+        return repo.save(item);
+    }
+
     public void eliminar(Long id) {
         repo.delete(obtener(id));
+    }
+
+    private String normalizarEstado(String estado) {
+        String estadoNormalizado = estado.trim().toUpperCase(Locale.ROOT);
+        if (!estadoNormalizado.equals("PENDIENTE")
+                && !estadoNormalizado.equals("APROBADO")
+                && !estadoNormalizado.equals("RECHAZADO")) {
+            throw new IllegalArgumentException("Estado de pago no permitido");
+        }
+
+        return estadoNormalizado;
     }
 }
