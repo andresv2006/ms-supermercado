@@ -18,18 +18,23 @@ import com.example.ms_empleado.dto.EmpleadoDTO;
 import com.example.ms_empleado.model.Empleado;
 import com.example.ms_empleado.service.EmpleadoService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/empleados")
 @RequiredArgsConstructor
+@Tag(name = "Empleados", description = "Gestion de empleados del supermercado")
 public class EmpleadoController {
 
     private final EmpleadoService service;
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "Crear empleado", description = "Registra un empleado con sus datos laborales")
     public ResponseEntity<ApiResponse<Empleado>> crear(@Valid @RequestBody EmpleadoDTO dto) {
 
         Empleado empleado = service.crear(dto);
@@ -45,6 +50,7 @@ public class EmpleadoController {
 
     @GetMapping
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    @Operation(summary = "Listar empleados", description = "Obtiene todos los empleados registrados")
     public ResponseEntity<ApiResponse<List<Empleado>>> listar() {
 
         return ResponseEntity.ok(
@@ -58,7 +64,8 @@ public class EmpleadoController {
 
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
-    public ResponseEntity<ApiResponse<Empleado>> obtener(@PathVariable Long id) {
+    @Operation(summary = "Obtener empleado", description = "Busca un empleado por su identificador")
+    public ResponseEntity<ApiResponse<Empleado>> obtener(@Parameter(description = "ID del empleado") @PathVariable Long id) {
 
         return ResponseEntity.ok(
                 ApiResponse.<Empleado>builder()
@@ -71,7 +78,8 @@ public class EmpleadoController {
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ApiResponse<Empleado>> actualizar(@PathVariable Long id,
+    @Operation(summary = "Actualizar empleado", description = "Modifica los datos de un empleado existente")
+    public ResponseEntity<ApiResponse<Empleado>> actualizar(@Parameter(description = "ID del empleado") @PathVariable Long id,
                                                             @Valid @RequestBody EmpleadoDTO dto) {
 
         Empleado empleado = service.actualizar(id, dto);
@@ -87,7 +95,8 @@ public class EmpleadoController {
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ApiResponse<Void>> eliminar(@PathVariable Long id) {
+    @Operation(summary = "Eliminar empleado", description = "Elimina un empleado registrado")
+    public ResponseEntity<ApiResponse<Void>> eliminar(@Parameter(description = "ID del empleado") @PathVariable Long id) {
 
         service.eliminar(id);
 

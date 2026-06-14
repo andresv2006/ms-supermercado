@@ -11,42 +11,51 @@ import com.example.ms_categoria.dto.CategoriaDTO;
 import com.example.ms_categoria.model.Categoria;
 import com.example.ms_categoria.service.CategoriaService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/categorias")
 @RequiredArgsConstructor
+@Tag(name = "Categorias", description = "Gestion de categorias para clasificar productos")
 public class CategoriaController {
     private final CategoriaService service;
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "Crear categoria", description = "Registra una nueva categoria disponible para productos")
     public ResponseEntity<ApiResponse<Categoria>> crear(@Valid @RequestBody CategoriaDTO dto) {
         return ResponseEntity.status(201).body(ApiResponse.<Categoria>builder().success(true).message("Categoria creado").data(service.crear(dto)).build());
     }
 
     @GetMapping
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    @Operation(summary = "Listar categorias", description = "Obtiene todas las categorias registradas")
     public ResponseEntity<ApiResponse<List<Categoria>>> listar() {
         return ResponseEntity.ok(ApiResponse.<List<Categoria>>builder().success(true).message("Listado obtenido").data(service.listar()).build());
     }
 
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
-    public ResponseEntity<ApiResponse<Categoria>> obtener(@PathVariable Long id) {
+    @Operation(summary = "Obtener categoria", description = "Busca una categoria por su identificador")
+    public ResponseEntity<ApiResponse<Categoria>> obtener(@Parameter(description = "ID de la categoria") @PathVariable Long id) {
         return ResponseEntity.ok(ApiResponse.<Categoria>builder().success(true).message("Categoria obtenido").data(service.obtener(id)).build());
     }
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ApiResponse<Categoria>> actualizar(@PathVariable Long id, @Valid @RequestBody CategoriaDTO dto) {
+    @Operation(summary = "Actualizar categoria", description = "Modifica los datos de una categoria existente")
+    public ResponseEntity<ApiResponse<Categoria>> actualizar(@Parameter(description = "ID de la categoria") @PathVariable Long id, @Valid @RequestBody CategoriaDTO dto) {
         return ResponseEntity.ok(ApiResponse.<Categoria>builder().success(true).message("Categoria actualizado").data(service.actualizar(id, dto)).build());
     }
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ApiResponse<Void>> eliminar(@PathVariable Long id) {
+    @Operation(summary = "Eliminar categoria", description = "Elimina una categoria registrada")
+    public ResponseEntity<ApiResponse<Void>> eliminar(@Parameter(description = "ID de la categoria") @PathVariable Long id) {
         service.eliminar(id);
         return ResponseEntity.ok(ApiResponse.<Void>builder().success(true).message("Categoria eliminado").build());
     }

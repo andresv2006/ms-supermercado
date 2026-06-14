@@ -19,21 +19,26 @@ import com.example.ms_carrito.dto.CarritoDTO;
 import com.example.ms_carrito.model.Carrito;
 import com.example.ms_carrito.service.CarritoService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/carritos")
 @RequiredArgsConstructor
+@Tag(name = "Carritos", description = "Gestion de carritos con validacion REST de cliente y producto")
 public class CarritoController {
 
     private final CarritoService service;
 
     @PostMapping
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    @Operation(summary = "Crear carrito", description = "Crea un carrito y valida cliente/producto consultando otros microservicios")
     public ResponseEntity<ApiResponse<Carrito>> crear(
             @Valid @RequestBody CarritoDTO dto,
-            @RequestHeader("Authorization") String token) {
+            @Parameter(description = "Token JWT") @RequestHeader("Authorization") String token) {
 
         return ResponseEntity.status(201).body(
                 ApiResponse.<Carrito>builder()
@@ -46,6 +51,7 @@ public class CarritoController {
 
     @GetMapping
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    @Operation(summary = "Listar carritos", description = "Obtiene todos los carritos registrados")
     public ResponseEntity<ApiResponse<List<Carrito>>> listar() {
         return ResponseEntity.ok(
                 ApiResponse.<List<Carrito>>builder()
@@ -58,7 +64,8 @@ public class CarritoController {
 
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
-    public ResponseEntity<ApiResponse<Carrito>> obtener(@PathVariable Long id) {
+    @Operation(summary = "Obtener carrito", description = "Busca un carrito por su identificador")
+    public ResponseEntity<ApiResponse<Carrito>> obtener(@Parameter(description = "ID del carrito") @PathVariable Long id) {
         return ResponseEntity.ok(
                 ApiResponse.<Carrito>builder()
                         .success(true)
@@ -70,10 +77,11 @@ public class CarritoController {
 
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    @Operation(summary = "Actualizar carrito", description = "Actualiza un carrito y vuelve a validar cliente/producto por REST")
     public ResponseEntity<ApiResponse<Carrito>> actualizar(
-            @PathVariable Long id,
+            @Parameter(description = "ID del carrito") @PathVariable Long id,
             @Valid @RequestBody CarritoDTO dto,
-            @RequestHeader("Authorization") String token) {
+            @Parameter(description = "Token JWT") @RequestHeader("Authorization") String token) {
 
         return ResponseEntity.ok(
                 ApiResponse.<Carrito>builder()
@@ -86,7 +94,8 @@ public class CarritoController {
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ApiResponse<Void>> eliminar(@PathVariable Long id) {
+    @Operation(summary = "Eliminar carrito", description = "Elimina un carrito registrado")
+    public ResponseEntity<ApiResponse<Void>> eliminar(@Parameter(description = "ID del carrito") @PathVariable Long id) {
         service.eliminar(id);
 
         return ResponseEntity.ok(
