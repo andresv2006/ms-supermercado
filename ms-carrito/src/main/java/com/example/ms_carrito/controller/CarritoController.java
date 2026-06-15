@@ -26,7 +26,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/api/carritos")
+@RequestMapping("/api/v1/carritos/")
 @RequiredArgsConstructor
 @Tag(name = "Carritos", description = "Gestion de carritos con validacion REST de cliente y producto")
 public class CarritoController {
@@ -97,12 +97,8 @@ public class CarritoController {
     @Operation(summary = "Eliminar carrito", description = "Elimina un carrito registrado")
     public ResponseEntity<ApiResponse<Void>> eliminar(@Parameter(description = "ID del carrito") @PathVariable Long id) {
         service.eliminar(id);
-
-        return ResponseEntity.ok(
-                ApiResponse.<Void>builder()
-                        .success(true)
-                        .message("Carrito eliminado")
-                        .build()
-        );
+        return ResponseEntity
+         .noContent()
+         .build();
     }
 }

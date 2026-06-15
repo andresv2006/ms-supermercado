@@ -24,7 +24,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/api/pedidos")
+@RequestMapping("/api/v1/pedidos")
 @RequiredArgsConstructor
 public class PedidoController {
 
@@ -86,12 +86,9 @@ public class PedidoController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<Void>> eliminar(@PathVariable Long id) {
         service.eliminar(id);
-
-        return ResponseEntity.ok(
-                ApiResponse.<Void>builder()
-                        .success(true)
-                        .message("Pedido eliminado")
-                        .build()
-        );
+        return ResponseEntity
+         .noContent()
+         .build();
+    
     }
 }

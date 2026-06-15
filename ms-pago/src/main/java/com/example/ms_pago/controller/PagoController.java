@@ -22,7 +22,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/api/pagos")
+@RequestMapping("/api/v1/pagos")
 @RequiredArgsConstructor
 public class PagoController {
 
@@ -114,11 +114,9 @@ public class PagoController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<Void>> eliminar(@PathVariable Long id) {
         service.eliminar(id);
-        return ResponseEntity.ok(
-                ApiResponse.<Void>builder()
-                        .success(true)
-                        .message("Pago eliminado")
-                        .build()
-        );
+        return ResponseEntity
+         .noContent()
+         .build();
+    
     }
 }
