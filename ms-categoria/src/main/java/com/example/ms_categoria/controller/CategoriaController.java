@@ -1,7 +1,10 @@
 package com.example.ms_categoria.controller;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +20,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 @RestController
 @RequestMapping("/api/categorias")
 @RequiredArgsConstructor
@@ -27,29 +33,36 @@ public class CategoriaController {
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Crear categoria", description = "Registra una nueva categoria disponible para productos")
-    public ResponseEntity<ApiResponse<Categoria>> crear(@Valid @RequestBody CategoriaDTO dto) {
-        return ResponseEntity.status(201).body(ApiResponse.<Categoria>builder().success(true).message("Categoria creado").data(service.crear(dto)).build());
+    public ResponseEntity<ApiResponse<EntityModel<Categoria>>> crear(@Valid @RequestBody CategoriaDTO dto) {
+        return ResponseEntity.status(201).body(ApiResponse.<EntityModel<Categoria>>builder().success(true).message("Categoria creado").data(agregarLinks(service.crear(dto))).build());
     }
 
     @GetMapping
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
     @Operation(summary = "Listar categorias", description = "Obtiene todas las categorias registradas")
-    public ResponseEntity<ApiResponse<List<Categoria>>> listar() {
-        return ResponseEntity.ok(ApiResponse.<List<Categoria>>builder().success(true).message("Listado obtenido").data(service.listar()).build());
+    public ResponseEntity<ApiResponse<CollectionModel<EntityModel<Categoria>>>> listar() {
+        List<EntityModel<Categoria>> categorias = service.listar().stream()
+                .map(this::agregarLinks)
+                .collect(Collectors.toList());
+
+        CollectionModel<EntityModel<Categoria>> collection = CollectionModel.of(categorias,
+                linkTo(methodOn(CategoriaController.class).listar()).withSelfRel());
+
+        return ResponseEntity.ok(ApiResponse.<CollectionModel<EntityModel<Categoria>>>builder().success(true).message("Listado obtenido").data(collection).build());
     }
 
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
     @Operation(summary = "Obtener categoria", description = "Busca una categoria por su identificador")
-    public ResponseEntity<ApiResponse<Categoria>> obtener(@Parameter(description = "ID de la categoria") @PathVariable Long id) {
-        return ResponseEntity.ok(ApiResponse.<Categoria>builder().success(true).message("Categoria obtenido").data(service.obtener(id)).build());
+    public ResponseEntity<ApiResponse<EntityModel<Categoria>>> obtener(@Parameter(description = "ID de la categoria") @PathVariable Long id) {
+        return ResponseEntity.ok(ApiResponse.<EntityModel<Categoria>>builder().success(true).message("Categoria obtenido").data(agregarLinks(service.obtener(id))).build());
     }
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Actualizar categoria", description = "Modifica los datos de una categoria existente")
-    public ResponseEntity<ApiResponse<Categoria>> actualizar(@Parameter(description = "ID de la categoria") @PathVariable Long id, @Valid @RequestBody CategoriaDTO dto) {
-        return ResponseEntity.ok(ApiResponse.<Categoria>builder().success(true).message("Categoria actualizado").data(service.actualizar(id, dto)).build());
+    public ResponseEntity<ApiResponse<EntityModel<Categoria>>> actualizar(@Parameter(description = "ID de la categoria") @PathVariable Long id, @Valid @RequestBody CategoriaDTO dto) {
+        return ResponseEntity.ok(ApiResponse.<EntityModel<Categoria>>builder().success(true).message("Categoria actualizado").data(agregarLinks(service.actualizar(id, dto))).build());
     }
 
     @DeleteMapping("/{id}")
@@ -58,5 +71,13 @@ public class CategoriaController {
     public ResponseEntity<ApiResponse<Void>> eliminar(@Parameter(description = "ID de la categoria") @PathVariable Long id) {
         service.eliminar(id);
         return ResponseEntity.ok(ApiResponse.<Void>builder().success(true).message("Categoria eliminado").build());
+    }
+
+    private EntityModel<Categoria> agregarLinks(Categoria categoria) {
+        return EntityModel.of(categoria,
+                linkTo(methodOn(CategoriaController.class).obtener(categoria.getId())).withSelfRel(),
+                linkTo(methodOn(CategoriaController.class).listar()).withRel("categorias"),
+                linkTo(methodOn(CategoriaController.class).actualizar(categoria.getId(), null)).withRel("actualizar"),
+                linkTo(methodOn(CategoriaController.class).eliminar(categoria.getId())).withRel("eliminar"));
     }
 }

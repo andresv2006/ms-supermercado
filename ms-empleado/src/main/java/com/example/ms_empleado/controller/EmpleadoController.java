@@ -1,7 +1,10 @@
 package com.example.ms_empleado.controller;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -24,6 +27,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 @RestController
 @RequestMapping("/api/empleados")
 @RequiredArgsConstructor
@@ -35,15 +41,15 @@ public class EmpleadoController {
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Crear empleado", description = "Registra un empleado con sus datos laborales")
-    public ResponseEntity<ApiResponse<Empleado>> crear(@Valid @RequestBody EmpleadoDTO dto) {
+    public ResponseEntity<ApiResponse<EntityModel<Empleado>>> crear(@Valid @RequestBody EmpleadoDTO dto) {
 
         Empleado empleado = service.crear(dto);
 
         return ResponseEntity.status(201).body(
-                ApiResponse.<Empleado>builder()
+                ApiResponse.<EntityModel<Empleado>>builder()
                         .success(true)
                         .message("Empleado creado")
-                        .data(empleado)
+                        .data(agregarLinks(empleado))
                         .build()
         );
     }
@@ -51,13 +57,19 @@ public class EmpleadoController {
     @GetMapping
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
     @Operation(summary = "Listar empleados", description = "Obtiene todos los empleados registrados")
-    public ResponseEntity<ApiResponse<List<Empleado>>> listar() {
+    public ResponseEntity<ApiResponse<CollectionModel<EntityModel<Empleado>>>> listar() {
+        List<EntityModel<Empleado>> empleados = service.listar().stream()
+                .map(this::agregarLinks)
+                .collect(Collectors.toList());
+
+        CollectionModel<EntityModel<Empleado>> collection = CollectionModel.of(empleados,
+                linkTo(methodOn(EmpleadoController.class).listar()).withSelfRel());
 
         return ResponseEntity.ok(
-                ApiResponse.<List<Empleado>>builder()
+                ApiResponse.<CollectionModel<EntityModel<Empleado>>>builder()
                         .success(true)
                         .message("Listado obtenido")
-                        .data(service.listar())
+                        .data(collection)
                         .build()
         );
     }
@@ -65,13 +77,13 @@ public class EmpleadoController {
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
     @Operation(summary = "Obtener empleado", description = "Busca un empleado por su identificador")
-    public ResponseEntity<ApiResponse<Empleado>> obtener(@Parameter(description = "ID del empleado") @PathVariable Long id) {
+    public ResponseEntity<ApiResponse<EntityModel<Empleado>>> obtener(@Parameter(description = "ID del empleado") @PathVariable Long id) {
 
         return ResponseEntity.ok(
-                ApiResponse.<Empleado>builder()
+                ApiResponse.<EntityModel<Empleado>>builder()
                         .success(true)
                         .message("Empleado obtenido")
-                        .data(service.obtener(id))
+                        .data(agregarLinks(service.obtener(id)))
                         .build()
         );
     }
@@ -79,16 +91,16 @@ public class EmpleadoController {
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Actualizar empleado", description = "Modifica los datos de un empleado existente")
-    public ResponseEntity<ApiResponse<Empleado>> actualizar(@Parameter(description = "ID del empleado") @PathVariable Long id,
+    public ResponseEntity<ApiResponse<EntityModel<Empleado>>> actualizar(@Parameter(description = "ID del empleado") @PathVariable Long id,
                                                             @Valid @RequestBody EmpleadoDTO dto) {
 
         Empleado empleado = service.actualizar(id, dto);
 
         return ResponseEntity.ok(
-                ApiResponse.<Empleado>builder()
+                ApiResponse.<EntityModel<Empleado>>builder()
                         .success(true)
                         .message("Empleado actualizado")
-                        .data(empleado)
+                        .data(agregarLinks(empleado))
                         .build()
         );
     }
@@ -106,5 +118,13 @@ public class EmpleadoController {
                         .message("Empleado eliminado")
                         .build()
         );
+    }
+
+    private EntityModel<Empleado> agregarLinks(Empleado empleado) {
+        return EntityModel.of(empleado,
+                linkTo(methodOn(EmpleadoController.class).obtener(empleado.getId())).withSelfRel(),
+                linkTo(methodOn(EmpleadoController.class).listar()).withRel("empleados"),
+                linkTo(methodOn(EmpleadoController.class).actualizar(empleado.getId(), null)).withRel("actualizar"),
+                linkTo(methodOn(EmpleadoController.class).eliminar(empleado.getId())).withRel("eliminar"));
     }
 }
