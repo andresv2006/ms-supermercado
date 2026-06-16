@@ -22,7 +22,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/api/devoluciones")
+@RequestMapping("/api/v1/devoluciones")
 @RequiredArgsConstructor
 public class DevolucionController {
 
@@ -125,11 +125,9 @@ public class DevolucionController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<Void>> eliminar(@PathVariable Long id) {
         service.eliminar(id);
-        return ResponseEntity.ok(
-                ApiResponse.<Void>builder()
-                        .success(true)
-                        .message("Devolucion eliminada")
-                        .build()
-        );
+        return ResponseEntity
+         .noContent()
+         .build();
     }
 }
+

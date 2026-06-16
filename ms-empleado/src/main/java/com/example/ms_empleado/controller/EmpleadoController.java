@@ -31,7 +31,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
-@RequestMapping("/api/empleados")
+@RequestMapping("/api/v1/empleados")
 @RequiredArgsConstructor
 @Tag(name = "Empleados", description = "Gestion de empleados del supermercado")
 public class EmpleadoController {
@@ -112,12 +112,9 @@ public class EmpleadoController {
 
         service.eliminar(id);
 
-        return ResponseEntity.ok(
-                ApiResponse.<Void>builder()
-                        .success(true)
-                        .message("Empleado eliminado")
-                        .build()
-        );
+        return ResponseEntity
+         .noContent()
+         .build();
     }
 
     private EntityModel<Empleado> agregarLinks(Empleado empleado) {

@@ -22,7 +22,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/api/inventarios")
+@RequestMapping("/api/v1/inventarios")
 @RequiredArgsConstructor
 public class InventarioController {
 
@@ -90,11 +90,9 @@ public class InventarioController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<Void>> eliminar(@PathVariable Long id) {
         service.eliminar(id);
-        return ResponseEntity.ok(
-                ApiResponse.<Void>builder()
-                        .success(true)
-                        .message("Inventario eliminado")
-                        .build()
-        );
+        return ResponseEntity
+         .noContent()
+         .build();
+    
     }
 }

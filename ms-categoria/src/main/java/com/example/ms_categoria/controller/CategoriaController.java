@@ -24,7 +24,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
-@RequestMapping("/api/categorias")
+@RequestMapping("/api/v1/categorias")
 @RequiredArgsConstructor
 @Tag(name = "Categorias", description = "Gestion de categorias para clasificar productos")
 public class CategoriaController {
@@ -70,7 +70,9 @@ public class CategoriaController {
     @Operation(summary = "Eliminar categoria", description = "Elimina una categoria registrada")
     public ResponseEntity<ApiResponse<Void>> eliminar(@Parameter(description = "ID de la categoria") @PathVariable Long id) {
         service.eliminar(id);
-        return ResponseEntity.ok(ApiResponse.<Void>builder().success(true).message("Categoria eliminado").build());
+        return ResponseEntity
+         .noContent()
+         .build();
     }
 
     private EntityModel<Categoria> agregarLinks(Categoria categoria) {
