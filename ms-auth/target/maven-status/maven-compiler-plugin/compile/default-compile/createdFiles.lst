@@ -1,3 +1,4 @@
+com\example\ms_auth\config\OpenApiConfig.class
 com\example\ms_auth\dto\AuthResponse.class
 com\example\ms_auth\dto\RefreshRequest.class
 com\example\ms_auth\exception\GlobalExceptionHandler.class
