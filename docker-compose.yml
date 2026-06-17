@@ -13,20 +13,6 @@ services:
     networks:
       - backend-network
 
-  mysql-categoria:
-    image: mysql:8
-    container_name: mysql-categoria
-    restart: unless-stopped
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: ms_categoria
-    ports:
-      - "3308:3306"
-    volumes:
-      - mysql_categoria_data:/var/lib/mysql
-    networks:
-      - backend-network
-
   mysql-empleado:
     image: mysql:8
     container_name: mysql-empleado
@@ -41,6 +27,62 @@ services:
     networks:
       - backend-network
 
+  mysql-categoria:
+    image: mysql:8
+    container_name: mysql-categoria
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: ms_categoria
+    ports:
+      - "3308:3306"
+    volumes:
+      - mysql_categoria_data:/var/lib/mysql
+    networks:
+      - backend-network
+
+  mysql-cliente:
+    image: mysql:8
+    container_name: mysql-cliente
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: ms_cliente
+    ports:
+      - "3311:3306"
+    volumes:
+      - mysql_cliente_data:/var/lib/mysql
+    networks:
+      - backend-network
+
+  mysql-producto:
+    image: mysql:8
+    container_name: mysql-producto
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: ms_producto
+    ports:
+      - "3312:3306"
+    volumes:
+      - mysql_producto_data:/var/lib/mysql
+    networks:
+      - backend-network
+
+  mysql-inventario:
+    image: mysql:8
+    container_name: mysql-inventario
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: ms_inventario
+    ports:
+      - "3313:3306"
+    volumes:
+      - mysql_inventario_data:/var/lib/mysql
+    networks:
+      - backend-network
+
   mysql-carrito:
     image: mysql:8
     container_name: mysql-carrito
@@ -52,6 +94,48 @@ services:
       - "3310:3306"
     volumes:
       - mysql_carrito_data:/var/lib/mysql
+    networks:
+      - backend-network
+
+  mysql-pedido:
+    image: mysql:8
+    container_name: mysql-pedido
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: ms_pedido
+    ports:
+      - "3314:3306"
+    volumes:
+      - mysql_pedido_data:/var/lib/mysql
+    networks:
+      - backend-network
+
+  mysql-pago:
+    image: mysql:8
+    container_name: mysql-pago
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: ms_pago
+    ports:
+      - "3315:3306"
+    volumes:
+      - mysql_pago_data:/var/lib/mysql
+    networks:
+      - backend-network
+
+  mysql-devolucion:
+    image: mysql:8
+    container_name: mysql-devolucion
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: ms_devolucion
+    ports:
+      - "3316:3306"
+    volumes:
+      - mysql_devolucion_data:/var/lib/mysql
     networks:
       - backend-network
 
@@ -82,25 +166,6 @@ services:
     networks:
       - backend-network
 
-  ms-categoria:
-    build: ./ms-categoria
-    container_name: ms-categoria
-    restart: unless-stopped
-    ports:
-      - "8082:8082"
-    environment:
-      DB_URL: jdbc:mysql://mysql-categoria:3306/ms_categoria
-      DB_USER: root
-      DB_PASSWORD: root
-      JWT_SECRET: producto_super_secreto_especial123456789
-      EUREKA_URL: http://ms-eureka:8761/eureka/
-    depends_on:
-      - mysql-categoria
-      - ms-eureka
-      - ms-auth
-    networks:
-      - backend-network
-
   ms-empleado:
     build: ./ms-empleado
     container_name: ms-empleado
@@ -120,6 +185,79 @@ services:
     networks:
       - backend-network
 
+  ms-categoria:
+    build: ./ms-categoria
+    container_name: ms-categoria
+    restart: unless-stopped
+    ports:
+      - "8082:8082"
+    environment:
+      DB_URL: jdbc:mysql://mysql-categoria:3306/ms_categoria
+      DB_USER: root
+      DB_PASSWORD: root
+      JWT_SECRET: producto_super_secreto_especial123456789
+      EUREKA_URL: http://ms-eureka:8761/eureka/
+    depends_on:
+      - mysql-categoria
+      - ms-eureka
+      - ms-auth
+    networks:
+      - backend-network
+
+  ms-cliente:
+    build: ./ms-cliente
+    container_name: ms-cliente
+    restart: unless-stopped
+    ports:
+      - "8083:8083"
+    environment:
+      DB_URL: jdbc:mysql://mysql-cliente:3306/ms_cliente
+      DB_USER: root
+      DB_PASSWORD: root
+      JWT_SECRET: producto_super_secreto_especial123456789
+    depends_on:
+      - mysql-cliente
+      - ms-auth
+    networks:
+      - backend-network
+
+  ms-producto:
+    build: ./ms-producto
+    container_name: ms-producto
+    restart: unless-stopped
+    ports:
+      - "8084:8084"
+    environment:
+      DB_URL: jdbc:mysql://mysql-producto:3306/ms_producto
+      DB_USER: root
+      DB_PASSWORD: root
+      JWT_SECRET: producto_super_secreto_especial123456789
+      CATEGORIA_SERVICE_URL: http://ms-categoria:8082/api/categorias/
+    depends_on:
+      - mysql-producto
+      - ms-auth
+      - ms-categoria
+    networks:
+      - backend-network
+
+  ms-inventario:
+    build: ./ms-inventario
+    container_name: ms-inventario
+    restart: unless-stopped
+    ports:
+      - "8085:8085"
+    environment:
+      DB_URL: jdbc:mysql://mysql-inventario:3306/ms_inventario
+      DB_USER: root
+      DB_PASSWORD: root
+      JWT_SECRET: producto_super_secreto_especial123456789
+    depends_on:
+      - mysql-inventario
+      - ms-auth
+      - ms-producto
+    networks:
+      - backend-network
+
   ms-carrito:
     build: ./ms-carrito
     container_name: ms-carrito
@@ -132,12 +270,72 @@ services:
       DB_PASSWORD: root
       JWT_SECRET: producto_super_secreto_especial123456789
       EUREKA_URL: http://ms-eureka:8761/eureka/
-      CLIENTE_SERVICE_URL: http://host.docker.internal:8083/api/clientes/
-      PRODUCTO_SERVICE_URL: http://host.docker.internal:8084/api/productos/
+      CLIENTE_SERVICE_URL: http://ms-cliente:8083/api/clientes/
+      PRODUCTO_SERVICE_URL: http://ms-producto:8084/api/productos/
     depends_on:
       - mysql-carrito
       - ms-eureka
       - ms-auth
+      - ms-cliente
+      - ms-producto
+    networks:
+      - backend-network
+
+  ms-pedido:
+    build: ./ms-pedido
+    container_name: ms-pedido
+    restart: unless-stopped
+    ports:
+      - "8087:8087"
+    environment:
+      DB_URL: jdbc:mysql://mysql-pedido:3306/ms_pedido
+      DB_USER: root
+      DB_PASSWORD: root
+      JWT_SECRET: producto_super_secreto_especial123456789
+      CLIENTE_SERVICE_URL: http://ms-cliente:8083/api/clientes/
+      PRODUCTO_SERVICE_URL: http://ms-producto:8084/api/productos/
+    depends_on:
+      - mysql-pedido
+      - ms-auth
+      - ms-cliente
+      - ms-producto
+    networks:
+      - backend-network
+
+  ms-pago:
+    build: ./ms-pago
+    container_name: ms-pago
+    restart: unless-stopped
+    ports:
+      - "8092:8090"
+    environment:
+      DB_URL: jdbc:mysql://mysql-pago:3306/ms_pago
+      DB_USER: root
+      DB_PASSWORD: root
+      JWT_SECRET: producto_super_secreto_especial123456789
+    depends_on:
+      - mysql-pago
+      - ms-auth
+      - ms-pedido
+    networks:
+      - backend-network
+
+  ms-devolucion:
+    build: ./ms-devolucion
+    container_name: ms-devolucion
+    restart: unless-stopped
+    ports:
+      - "8091:8091"
+    environment:
+      DB_URL: jdbc:mysql://mysql-devolucion:3306/ms_devolucion
+      DB_USER: root
+      DB_PASSWORD: root
+      JWT_SECRET: producto_super_secreto_especial123456789
+    depends_on:
+      - mysql-devolucion
+      - ms-auth
+      - ms-pedido
+      - ms-pago
     networks:
       - backend-network
 
@@ -152,9 +350,15 @@ services:
     depends_on:
       - ms-eureka
       - ms-auth
-      - ms-categoria
       - ms-empleado
+      - ms-categoria
+      - ms-cliente
+      - ms-producto
+      - ms-inventario
       - ms-carrito
+      - ms-pedido
+      - ms-pago
+      - ms-devolucion
     networks:
       - backend-network
 
@@ -163,6 +367,12 @@ networks:
 
 volumes:
   mysql_auth_data:
-  mysql_categoria_data:
   mysql_empleado_data:
+  mysql_categoria_data:
+  mysql_cliente_data:
+  mysql_producto_data:
+  mysql_inventario_data:
   mysql_carrito_data:
+  mysql_pedido_data:
+  mysql_pago_data:
+  mysql_devolucion_data:

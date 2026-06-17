@@ -1,5 +1,6 @@
 package com.example.ms_producto.client;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -12,12 +13,13 @@ import lombok.RequiredArgsConstructor;
 public class CategoriaClient {
 
     private final WebClient webClient;
-    private static final String BASE_URL = "http://localhost:8082/api/categorias/";
+
+    @Value("${categoria.service.url}")
+    private String baseUrl;
 
     public Object obtener(Long id, String token) {
-        
         ApiResponse<Object> response = webClient.get()
-                .uri(BASE_URL + id)
+                .uri(baseUrl + id)
                 .header("Authorization", token)
                 .retrieve()
                 .bodyToMono(new ParameterizedTypeReference<ApiResponse<Object>>() {})

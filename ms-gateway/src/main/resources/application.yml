@@ -7,21 +7,45 @@ spring:
         webmvc:
           routes:
             - id: ms-auth
-              uri: lb://ms-auth
+              uri: http://ms-auth:8080
               predicates:
                 - Path=/auth/**
-            - id: ms-categoria
-              uri: lb://ms-categoria
-              predicates:
-                - Path=/api/categorias/**
             - id: ms-empleado
-              uri: lb://ms-empleado
+              uri: http://ms-empleado:8081
               predicates:
                 - Path=/api/empleados/**
+            - id: ms-categoria
+              uri: http://ms-categoria:8082
+              predicates:
+                - Path=/api/categorias/**
+            - id: ms-cliente
+              uri: http://ms-cliente:8083
+              predicates:
+                - Path=/api/clientes/**
+            - id: ms-producto
+              uri: http://ms-producto:8084
+              predicates:
+                - Path=/api/productos/**
+            - id: ms-inventario
+              uri: http://ms-inventario:8085
+              predicates:
+                - Path=/api/inventarios/**
             - id: ms-carrito
-              uri: lb://ms-carrito
+              uri: http://ms-carrito:8086
               predicates:
                 - Path=/api/carritos/**
+            - id: ms-pedido
+              uri: http://ms-pedido:8087
+              predicates:
+                - Path=/api/pedidos/**
+            - id: ms-pago
+              uri: http://ms-pago:8090
+              predicates:
+                - Path=/api/pagos/**
+            - id: ms-devolucion
+              uri: http://ms-devolucion:8091
+              predicates:
+                - Path=/api/devoluciones/**
 
 server:
   port: ${SERVER_PORT:8090}
