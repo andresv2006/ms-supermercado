@@ -59,6 +59,7 @@ Rutas configuradas:
 | Ruta | Servicio destino |
 | --- | --- |
 | `/auth/**` | `ms-auth` |
+<<<<<<< HEAD
 | `/api/v1/empleados/**` | `ms-empleado` |
 | `/api/v1/categorias/**` | `ms-categoria` |
 | `/api/v1/clientes/**` | `ms-cliente` |
@@ -68,6 +69,17 @@ Rutas configuradas:
 | `/api/v1/pedidos/**` | `ms-pedido` |
 | `/api/v1/pagos/**` | `ms-pago` |
 | `/api/v1/devoluciones/**` | `ms-devolucion` |
+=======
+| `/api/empleados/**` | `ms-empleado` |
+| `/api/categorias/**` | `ms-categoria` |
+| `/api/clientes/**` | `ms-cliente` |
+| `/api/productos/**` | `ms-producto` |
+| `/api/inventarios/**` | `ms-inventario` |
+| `/api/carritos/**` | `ms-carrito` |
+| `/api/pedidos/**` | `ms-pedido` |
+| `/api/pagos/**` | `ms-pago` |
+| `/api/devoluciones/**` | `ms-devolucion` |
+>>>>>>> f0ee150c58ff1ff5eaca94997ea39d06ccf9c141
 
 El gateway se ejecuta en el puerto `8090`.
 
