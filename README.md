@@ -59,15 +59,15 @@ Rutas configuradas:
 | Ruta | Servicio destino |
 | --- | --- |
 | `/auth/**` | `ms-auth` |
-| `/api/empleados/**` | `ms-empleado` |
-| `/api/categorias/**` | `ms-categoria` |
-| `/api/clientes/**` | `ms-cliente` |
-| `/api/productos/**` | `ms-producto` |
-| `/api/inventarios/**` | `ms-inventario` |
-| `/api/carritos/**` | `ms-carrito` |
-| `/api/pedidos/**` | `ms-pedido` |
-| `/api/pagos/**` | `ms-pago` |
-| `/api/devoluciones/**` | `ms-devolucion` |
+| `/api/v1/empleados/**` | `ms-empleado` |
+| `/api/v1/categorias/**` | `ms-categoria` |
+| `/api/v1/clientes/**` | `ms-cliente` |
+| `/api/v1/productos/**` | `ms-producto` |
+| `/api/v1/inventarios/**` | `ms-inventario` |
+| `/api/v1/carritos/**` | `ms-carrito` |
+| `/api/v1/pedidos/**` | `ms-pedido` |
+| `/api/v1/pagos/**` | `ms-pago` |
+| `/api/v1/devoluciones/**` | `ms-devolucion` |
 
 El gateway se ejecuta en el puerto `8090`.
 
@@ -181,3 +181,4 @@ wsl --shutdown
 - Eureka Server como Service Discovery.
 - API Gateway.
 - Docker y Docker Compose.
+
