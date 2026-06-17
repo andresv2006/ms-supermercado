@@ -232,7 +232,7 @@ services:
       DB_USER: root
       DB_PASSWORD: root
       JWT_SECRET: producto_super_secreto_especial123456789
-      CATEGORIA_SERVICE_URL: http://ms-categoria:8082/api/categorias/
+      CATEGORIA_SERVICE_URL: http://ms-categoria:8082/api/v1/categorias/
     depends_on:
       - mysql-producto
       - ms-auth
@@ -270,8 +270,8 @@ services:
       DB_PASSWORD: root
       JWT_SECRET: producto_super_secreto_especial123456789
       EUREKA_URL: http://ms-eureka:8761/eureka/
-      CLIENTE_SERVICE_URL: http://ms-cliente:8083/api/clientes/
-      PRODUCTO_SERVICE_URL: http://ms-producto:8084/api/productos/
+      CLIENTE_SERVICE_URL: http://ms-cliente:8083/api/v1/clientes/
+      PRODUCTO_SERVICE_URL: http://ms-producto:8084/api/v1/productos/
     depends_on:
       - mysql-carrito
       - ms-eureka
@@ -292,8 +292,8 @@ services:
       DB_USER: root
       DB_PASSWORD: root
       JWT_SECRET: producto_super_secreto_especial123456789
-      CLIENTE_SERVICE_URL: http://ms-cliente:8083/api/clientes/
-      PRODUCTO_SERVICE_URL: http://ms-producto:8084/api/productos/
+      CLIENTE_SERVICE_URL: http://ms-cliente:8083/api/v1/clientes/
+      PRODUCTO_SERVICE_URL: http://ms-producto:8084/api/v1/productos/
     depends_on:
       - mysql-pedido
       - ms-auth
@@ -376,3 +376,4 @@ volumes:
   mysql_pedido_data:
   mysql_pago_data:
   mysql_devolucion_data:
+
