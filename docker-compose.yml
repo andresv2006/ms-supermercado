@@ -1,0 +1,168 @@
+services:
+  mysql-auth:
+    image: mysql:8
+    container_name: mysql-auth
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: ms_auth
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_auth_data:/var/lib/mysql
+    networks:
+      - backend-network
+
+  mysql-categoria:
+    image: mysql:8
+    container_name: mysql-categoria
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: ms_categoria
+    ports:
+      - "3308:3306"
+    volumes:
+      - mysql_categoria_data:/var/lib/mysql
+    networks:
+      - backend-network
+
+  mysql-empleado:
+    image: mysql:8
+    container_name: mysql-empleado
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: ms_empleado
+    ports:
+      - "3309:3306"
+    volumes:
+      - mysql_empleado_data:/var/lib/mysql
+    networks:
+      - backend-network
+
+  mysql-carrito:
+    image: mysql:8
+    container_name: mysql-carrito
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: ms_carrito
+    ports:
+      - "3310:3306"
+    volumes:
+      - mysql_carrito_data:/var/lib/mysql
+    networks:
+      - backend-network
+
+  ms-eureka:
+    build: ./ms-eureka
+    container_name: ms-eureka
+    restart: unless-stopped
+    ports:
+      - "8761:8761"
+    networks:
+      - backend-network
+
+  ms-auth:
+    build: ./ms-auth
+    container_name: ms-auth
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      DB_URL: jdbc:mysql://mysql-auth:3306/ms_auth
+      DB_USER: root
+      DB_PASSWORD: root
+      JWT_SECRET: producto_super_secreto_especial123456789
+      EUREKA_URL: http://ms-eureka:8761/eureka/
+    depends_on:
+      - mysql-auth
+      - ms-eureka
+    networks:
+      - backend-network
+
+  ms-categoria:
+    build: ./ms-categoria
+    container_name: ms-categoria
+    restart: unless-stopped
+    ports:
+      - "8082:8082"
+    environment:
+      DB_URL: jdbc:mysql://mysql-categoria:3306/ms_categoria
+      DB_USER: root
+      DB_PASSWORD: root
+      JWT_SECRET: producto_super_secreto_especial123456789
+      EUREKA_URL: http://ms-eureka:8761/eureka/
+    depends_on:
+      - mysql-categoria
+      - ms-eureka
+      - ms-auth
+    networks:
+      - backend-network
+
+  ms-empleado:
+    build: ./ms-empleado
+    container_name: ms-empleado
+    restart: unless-stopped
+    ports:
+      - "8081:8081"
+    environment:
+      DB_URL: jdbc:mysql://mysql-empleado:3306/ms_empleado
+      DB_USER: root
+      DB_PASSWORD: root
+      JWT_SECRET: producto_super_secreto_especial123456789
+      EUREKA_URL: http://ms-eureka:8761/eureka/
+    depends_on:
+      - mysql-empleado
+      - ms-eureka
+      - ms-auth
+    networks:
+      - backend-network
+
+  ms-carrito:
+    build: ./ms-carrito
+    container_name: ms-carrito
+    restart: unless-stopped
+    ports:
+      - "8086:8086"
+    environment:
+      DB_URL: jdbc:mysql://mysql-carrito:3306/ms_carrito
+      DB_USER: root
+      DB_PASSWORD: root
+      JWT_SECRET: producto_super_secreto_especial123456789
+      EUREKA_URL: http://ms-eureka:8761/eureka/
+      CLIENTE_SERVICE_URL: http://host.docker.internal:8083/api/clientes/
+      PRODUCTO_SERVICE_URL: http://host.docker.internal:8084/api/productos/
+    depends_on:
+      - mysql-carrito
+      - ms-eureka
+      - ms-auth
+    networks:
+      - backend-network
+
+  ms-gateway:
+    build: ./ms-gateway
+    container_name: ms-gateway
+    restart: unless-stopped
+    ports:
+      - "8090:8090"
+    environment:
+      EUREKA_URL: http://ms-eureka:8761/eureka/
+    depends_on:
+      - ms-eureka
+      - ms-auth
+      - ms-categoria
+      - ms-empleado
+      - ms-carrito
+    networks:
+      - backend-network
+
+networks:
+  backend-network:
+
+volumes:
+  mysql_auth_data:
+  mysql_categoria_data:
+  mysql_empleado_data:
+  mysql_carrito_data:
