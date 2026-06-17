@@ -1,0 +1,12 @@
+com\example\ms_cliente\security\JwtUtil.class
+com\example\ms_cliente\MsClienteApplication.class
+com\example\ms_cliente\repository\ClienteRepository.class
+com\example\ms_cliente\model\Cliente.class
+com\example\ms_cliente\dto\ApiResponse$ApiResponseBuilder.class
+com\example\ms_cliente\dto\ApiResponse.class
+com\example\ms_cliente\dto\ClienteDTO.class
+com\example\ms_cliente\Controller\ClienteController.class
+com\example\ms_cliente\exception\GlobalExceptionHandler.class
+com\example\ms_cliente\config\SecurityConfig.class
+com\example\ms_cliente\security\JwtFilter.class
+com\example\ms_cliente\service\ClienteService.class

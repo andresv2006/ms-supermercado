@@ -1,0 +1,13 @@
+com\example\ms_inventario\controller\InventarioController.class
+com\example\ms_inventario\security\JwtUtil.class
+com\example\ms_inventario\model\Inventario.class
+com\example\ms_inventario\config\SecurityConfig.class
+com\example\ms_inventario\exception\GlobalExceptionHandler.class
+com\example\ms_inventario\service\InventarioService.class
+com\example\ms_inventario\dto\ApiResponse$ApiResponseBuilder.class
+com\example\ms_inventario\security\JwtFilter.class
+com\example\ms_inventario\model\Inventario$InventarioBuilder.class
+com\example\ms_inventario\repository\InventarioRepository.class
+com\example\ms_inventario\MsInventarioApplication.class
+com\example\ms_inventario\dto\ApiResponse.class
+com\example\ms_inventario\dto\InventarioDTO.class
