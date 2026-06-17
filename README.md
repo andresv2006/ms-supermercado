@@ -2,9 +2,9 @@
 
 Integrantes:
 
-Enzo muñoz
-Sebastian sellao 
-Andres vargas
+Enzo Munoz
+Sebastian Sellao
+Andres Vargas
 
 ## Descripcion
 
@@ -14,7 +14,7 @@ El sistema permite administrar autenticacion, categorias, productos, clientes, i
 
 ## Microservicios
 
-| Microservicio | Responsabilidad | Puerto |
+| Microservicio | Responsabilidad | Puerto local |
 | --- | --- | --- |
 | ms-auth | Registro, login y generacion de tokens JWT | 8080 |
 | ms-empleado | Gestion de empleados | 8081 |
@@ -24,14 +24,14 @@ El sistema permite administrar autenticacion, categorias, productos, clientes, i
 | ms-inventario | Gestion de inventario | 8085 |
 | ms-carrito | Gestion de carrito de compras | 8086 |
 | ms-pedido | Gestion de pedidos | 8087 |
-| ms-pago | Gestion de pagos | 8088 |
-| ms-devolucion | Gestion de devoluciones | 8089 |
+| ms-pago | Gestion de pagos | 8092 en Docker, 8090 interno |
+| ms-devolucion | Gestion de devoluciones | 8091 |
 | ms-eureka | Server Discovery | 8761 |
 | ms-gateway | API Gateway | 8090 |
 
 ## Arquitectura
 
-El cliente consume el sistema por medio del API Gateway. Eureka permite registrar y descubrir servicios usando nombres logicos, evitando depender directamente de puertos fijos dentro de la arquitectura.
+El cliente consume el sistema por medio del API Gateway. Eureka permite registrar y visualizar servicios dentro de la arquitectura. Cada microservicio conserva su propia base de datos, por lo que no comparten tablas entre si.
 
 Flujo general:
 
@@ -48,22 +48,28 @@ Relaciones principales entre servicios:
 - `ms-producto` consulta `ms-categoria`.
 - `ms-carrito` consulta `ms-cliente` y `ms-producto`.
 - `ms-pedido` consulta `ms-cliente` y `ms-producto`.
-- `ms-pago` consulta `ms-pedido`.
-- `ms-devolucion` consulta `ms-pedido` y `ms-pago`.
-- `ms-inventario` consulta `ms-producto`.
+- `ms-pago` trabaja sobre pedidos generados.
+- `ms-devolucion` trabaja sobre pedidos y pagos asociados.
+- `ms-inventario` administra stock asociado a productos.
 
 ## API Gateway
 
-Rutas configuradas actualmente para los servicios trabajados:
+Rutas configuradas:
 
 | Ruta | Servicio destino |
 | --- | --- |
-| `/auth/**` | `lb://ms-auth` |
-| `/api/categorias/**` | `lb://ms-categoria` |
-| `/api/empleados/**` | `lb://ms-empleado` |
-| `/api/carritos/**` | `lb://ms-carrito` |
+| `/auth/**` | `ms-auth` |
+| `/api/empleados/**` | `ms-empleado` |
+| `/api/categorias/**` | `ms-categoria` |
+| `/api/clientes/**` | `ms-cliente` |
+| `/api/productos/**` | `ms-producto` |
+| `/api/inventarios/**` | `ms-inventario` |
+| `/api/carritos/**` | `ms-carrito` |
+| `/api/pedidos/**` | `ms-pedido` |
+| `/api/pagos/**` | `ms-pago` |
+| `/api/devoluciones/**` | `ms-devolucion` |
 
-El gateway se ejecuta en el puerto `8090` porque `ms-auth` utiliza el puerto `8080`.
+El gateway se ejecuta en el puerto `8090`.
 
 ## Eureka
 
@@ -73,18 +79,19 @@ Eureka Server se ejecuta en:
 http://localhost:8761
 ```
 
-Orden recomendado de ejecucion:
+Orden recomendado de ejecucion manual:
 
 1. `ms-eureka`
 2. `ms-auth`
-3. `ms-categoria`
-4. `ms-empleado`
-5. `ms-carrito`
-6. `ms-gateway`
+3. Servicios base: categoria, cliente, producto, empleado
+4. Servicios de flujo: inventario, carrito, pedido, pago, devolucion
+5. `ms-gateway`
+
+Con Docker Compose este orden lo administra el archivo `docker-compose.yml`.
 
 ## Swagger
 
-Swagger/OpenAPI se revisa directamente en cada microservicio:
+Swagger/OpenAPI se revisa directamente en los microservicios que tienen documentacion configurada:
 
 ```text
 http://localhost:8080/swagger-ui/index.html
@@ -95,7 +102,7 @@ http://localhost:8086/swagger-ui/index.html
 
 ## Pruebas
 
-El proyecto incorpora pruebas unitarias con JUnit y Mockito en los servicios principales. Para ejecutar pruebas:
+El proyecto incorpora pruebas unitarias con JUnit y Mockito en los servicios principales. Para ejecutar pruebas desde un microservicio:
 
 ```powershell
 .\mvnw.cmd test
@@ -115,24 +122,31 @@ target/site/jacoco/index.html
 
 ## Docker
 
-Para construir la arquitectura con Docker se agregaron `Dockerfile` en los servicios trabajados y un archivo `docker-compose.yml` en la raiz.
+La arquitectura se puede levantar con Docker Compose. Cada microservicio tiene su propio `Dockerfile` y cada base de datos MySQL se ejecuta en un contenedor separado.
 
-Primero generar los JAR:
-
-```powershell
-.\mvnw.cmd clean package -DskipTests
-```
-
-Luego levantar con Docker Compose desde la raiz:
+Desde la raiz del proyecto:
 
 ```powershell
-docker compose up --build
+cd "D:\Descargas 2\ms usper\ms-supermercado"
+docker compose up --build -d
 ```
 
-Para detener:
+Para revisar el estado:
+
+```powershell
+docker compose ps
+```
+
+Para detener todo:
 
 ```powershell
 docker compose down
+```
+
+Si Docker queda consumiendo muchos recursos, se puede apagar WSL despues de detener los contenedores:
+
+```powershell
+wsl --shutdown
 ```
 
 ## Flujo de prueba en Postman

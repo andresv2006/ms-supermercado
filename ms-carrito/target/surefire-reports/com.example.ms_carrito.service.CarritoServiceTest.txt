@@ -1,4 +1,0 @@
--------------------------------------------------------------------------------
-Test set: com.example.ms_carrito.service.CarritoServiceTest
--------------------------------------------------------------------------------
-Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.157 s -- in com.example.ms_carrito.service.CarritoServiceTest
