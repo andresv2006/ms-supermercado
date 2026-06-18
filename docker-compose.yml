@@ -215,8 +215,10 @@ services:
       DB_USER: root
       DB_PASSWORD: root
       JWT_SECRET: producto_super_secreto_especial123456789
+      EUREKA_URL: http://ms-eureka:8761/eureka/
     depends_on:
       - mysql-cliente
+      - ms-eureka
       - ms-auth
     networks:
       - backend-network
@@ -232,9 +234,11 @@ services:
       DB_USER: root
       DB_PASSWORD: root
       JWT_SECRET: producto_super_secreto_especial123456789
+      EUREKA_URL: http://ms-eureka:8761/eureka/
       CATEGORIA_SERVICE_URL: http://ms-categoria:8082/api/v1/categorias/
     depends_on:
       - mysql-producto
+      - ms-eureka
       - ms-auth
       - ms-categoria
     networks:
@@ -251,8 +255,10 @@ services:
       DB_USER: root
       DB_PASSWORD: root
       JWT_SECRET: producto_super_secreto_especial123456789
+      EUREKA_URL: http://ms-eureka:8761/eureka/
     depends_on:
       - mysql-inventario
+      - ms-eureka
       - ms-auth
       - ms-producto
     networks:
@@ -292,10 +298,12 @@ services:
       DB_USER: root
       DB_PASSWORD: root
       JWT_SECRET: producto_super_secreto_especial123456789
+      EUREKA_URL: http://ms-eureka:8761/eureka/
       CLIENTE_SERVICE_URL: http://ms-cliente:8083/api/v1/clientes/
       PRODUCTO_SERVICE_URL: http://ms-producto:8084/api/v1/productos/
     depends_on:
       - mysql-pedido
+      - ms-eureka
       - ms-auth
       - ms-cliente
       - ms-producto
@@ -313,8 +321,10 @@ services:
       DB_USER: root
       DB_PASSWORD: root
       JWT_SECRET: producto_super_secreto_especial123456789
+      EUREKA_URL: http://ms-eureka:8761/eureka/
     depends_on:
       - mysql-pago
+      - ms-eureka
       - ms-auth
       - ms-pedido
     networks:
@@ -331,8 +341,10 @@ services:
       DB_USER: root
       DB_PASSWORD: root
       JWT_SECRET: producto_super_secreto_especial123456789
+      EUREKA_URL: http://ms-eureka:8761/eureka/
     depends_on:
       - mysql-devolucion
+      - ms-eureka
       - ms-auth
       - ms-pedido
       - ms-pago
