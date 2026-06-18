@@ -8,6 +8,7 @@ import com.example.ms_auth.dto.*;
 import com.example.ms_auth.service.AuthService;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -26,18 +27,32 @@ public class AuthController {
 
     @PostMapping("/register")
     @Operation(summary = "Registrar usuario", description = "Crea un usuario y devuelve tokens JWT para consumir los microservicios protegidos")
+    @ApiResponses(value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Usuario registrado"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Solicitud invalida")
+    })
     public ResponseEntity<ApiResponse<EntityModel<AuthResponse>>> register(@Valid @RequestBody RegisterRequest req) {
         return ResponseEntity.ok(ApiResponse.<EntityModel<AuthResponse>>builder().success(true).message("Usuario registrado").data(agregarLinks(service.register(req))).build());
     }
 
     @PostMapping("/login")
     @Operation(summary = "Iniciar sesion", description = "Valida credenciales y entrega token de acceso y refresh token")
+    @ApiResponses(value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Login exitoso"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Solicitud invalida"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "Credenciales invalidas")
+    })
     public ResponseEntity<ApiResponse<EntityModel<AuthResponse>>> login(@Valid @RequestBody LoginRequest req) {
         return ResponseEntity.ok(ApiResponse.<EntityModel<AuthResponse>>builder().success(true).message("Login exitoso").data(agregarLinks(service.login(req))).build());
     }
 
     @PostMapping("/refresh")
     @Operation(summary = "Renovar token", description = "Genera un nuevo token de acceso usando un refresh token valido")
+    @ApiResponses(value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Token renovado"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Solicitud invalida"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "Refresh token invalido")
+    })
     public ResponseEntity<ApiResponse<EntityModel<AuthResponse>>> refresh(@Valid @RequestBody RefreshRequest req) {
         return ResponseEntity.ok(ApiResponse.<EntityModel<AuthResponse>>builder().success(true).message("Token renovado").data(agregarLinks(service.refresh(req.getRefreshToken()))).build());
     }

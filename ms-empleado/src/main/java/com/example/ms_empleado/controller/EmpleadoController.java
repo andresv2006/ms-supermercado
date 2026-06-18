@@ -22,6 +22,7 @@ import com.example.ms_empleado.model.Empleado;
 import com.example.ms_empleado.service.EmpleadoService;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -41,6 +42,12 @@ public class EmpleadoController {
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Crear empleado", description = "Registra un empleado con sus datos laborales")
+    @ApiResponses(value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "201", description = "Empleado creado"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Solicitud invalida"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "No autenticado o token invalido"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "403", description = "Acceso denegado")
+    })
     public ResponseEntity<ApiResponse<EntityModel<Empleado>>> crear(@Valid @RequestBody EmpleadoDTO dto) {
 
         Empleado empleado = service.crear(dto);
@@ -57,6 +64,11 @@ public class EmpleadoController {
     @GetMapping
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
     @Operation(summary = "Listar empleados", description = "Obtiene todos los empleados registrados")
+    @ApiResponses(value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Listado obtenido"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "No autenticado o token invalido"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "403", description = "Acceso denegado")
+    })
     public ResponseEntity<ApiResponse<CollectionModel<EntityModel<Empleado>>>> listar() {
         List<EntityModel<Empleado>> empleados = service.listar().stream()
                 .map(this::agregarLinks)
@@ -77,6 +89,12 @@ public class EmpleadoController {
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
     @Operation(summary = "Obtener empleado", description = "Busca un empleado por su identificador")
+    @ApiResponses(value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Empleado obtenido"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "No autenticado o token invalido"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "403", description = "Acceso denegado"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "404", description = "Empleado no encontrado")
+    })
     public ResponseEntity<ApiResponse<EntityModel<Empleado>>> obtener(@Parameter(description = "ID del empleado") @PathVariable Long id) {
 
         return ResponseEntity.ok(
@@ -91,6 +109,13 @@ public class EmpleadoController {
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Actualizar empleado", description = "Modifica los datos de un empleado existente")
+    @ApiResponses(value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Empleado actualizado"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Solicitud invalida"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "No autenticado o token invalido"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "403", description = "Acceso denegado"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "404", description = "Empleado no encontrado")
+    })
     public ResponseEntity<ApiResponse<EntityModel<Empleado>>> actualizar(@Parameter(description = "ID del empleado") @PathVariable Long id,
                                                             @Valid @RequestBody EmpleadoDTO dto) {
 
@@ -108,6 +133,12 @@ public class EmpleadoController {
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Eliminar empleado", description = "Elimina un empleado registrado")
+    @ApiResponses(value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "204", description = "Empleado eliminado"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "No autenticado o token invalido"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "403", description = "Acceso denegado"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "404", description = "Empleado no encontrado")
+    })
     public ResponseEntity<ApiResponse<Void>> eliminar(@Parameter(description = "ID del empleado") @PathVariable Long id) {
 
         service.eliminar(id);

@@ -23,6 +23,7 @@ import com.example.ms_carrito.model.Carrito;
 import com.example.ms_carrito.service.CarritoService;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -42,6 +43,12 @@ public class CarritoController {
     @PostMapping
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
     @Operation(summary = "Crear carrito", description = "Crea un carrito y valida cliente/producto consultando otros microservicios")
+    @ApiResponses(value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "201", description = "Carrito creado"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Solicitud invalida"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "No autenticado o token invalido"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "403", description = "Acceso denegado")
+    })
     public ResponseEntity<ApiResponse<EntityModel<Carrito>>> crear(
             @Valid @RequestBody CarritoDTO dto,
             @Parameter(description = "Token JWT") @RequestHeader("Authorization") String token) {
@@ -58,6 +65,11 @@ public class CarritoController {
     @GetMapping
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
     @Operation(summary = "Listar carritos", description = "Obtiene todos los carritos registrados")
+    @ApiResponses(value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Listado obtenido"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "No autenticado o token invalido"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "403", description = "Acceso denegado")
+    })
     public ResponseEntity<ApiResponse<CollectionModel<EntityModel<Carrito>>>> listar() {
         List<EntityModel<Carrito>> carritos = service.listar().stream()
                 .map(this::agregarLinks)
@@ -78,6 +90,12 @@ public class CarritoController {
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
     @Operation(summary = "Obtener carrito", description = "Busca un carrito por su identificador")
+    @ApiResponses(value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Carrito obtenido"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "No autenticado o token invalido"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "403", description = "Acceso denegado"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "404", description = "Carrito no encontrado")
+    })
     public ResponseEntity<ApiResponse<EntityModel<Carrito>>> obtener(@Parameter(description = "ID del carrito") @PathVariable Long id) {
         return ResponseEntity.ok(
                 ApiResponse.<EntityModel<Carrito>>builder()
@@ -91,6 +109,13 @@ public class CarritoController {
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
     @Operation(summary = "Actualizar carrito", description = "Actualiza un carrito y vuelve a validar cliente/producto por REST")
+    @ApiResponses(value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Carrito actualizado"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Solicitud invalida o cliente/producto no existe"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "No autenticado o token invalido"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "403", description = "Acceso denegado"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "404", description = "Carrito no encontrado")
+    })
     public ResponseEntity<ApiResponse<EntityModel<Carrito>>> actualizar(
             @Parameter(description = "ID del carrito") @PathVariable Long id,
             @Valid @RequestBody CarritoDTO dto,
@@ -108,6 +133,12 @@ public class CarritoController {
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Eliminar carrito", description = "Elimina un carrito registrado")
+    @ApiResponses(value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "204", description = "Carrito eliminado"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "No autenticado o token invalido"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "403", description = "Acceso denegado"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "404", description = "Carrito no encontrado")
+    })
     public ResponseEntity<ApiResponse<Void>> eliminar(@Parameter(description = "ID del carrito") @PathVariable Long id) {
         service.eliminar(id);
         return ResponseEntity

@@ -15,6 +15,7 @@ import com.example.ms_categoria.model.Categoria;
 import com.example.ms_categoria.service.CategoriaService;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -33,6 +34,12 @@ public class CategoriaController {
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Crear categoria", description = "Registra una nueva categoria disponible para productos")
+    @ApiResponses(value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "201", description = "Categoria creado"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Solicitud invalida"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "No autenticado o token invalido"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "403", description = "Acceso denegado")
+    })
     public ResponseEntity<ApiResponse<EntityModel<Categoria>>> crear(@Valid @RequestBody CategoriaDTO dto) {
         return ResponseEntity.status(201).body(ApiResponse.<EntityModel<Categoria>>builder().success(true).message("Categoria creado").data(agregarLinks(service.crear(dto))).build());
     }
@@ -40,6 +47,11 @@ public class CategoriaController {
     @GetMapping
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
     @Operation(summary = "Listar categorias", description = "Obtiene todas las categorias registradas")
+    @ApiResponses(value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Listado obtenido"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "No autenticado o token invalido"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "403", description = "Acceso denegado")
+    })
     public ResponseEntity<ApiResponse<CollectionModel<EntityModel<Categoria>>>> listar() {
         List<EntityModel<Categoria>> categorias = service.listar().stream()
                 .map(this::agregarLinks)
@@ -54,6 +66,12 @@ public class CategoriaController {
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
     @Operation(summary = "Obtener categoria", description = "Busca una categoria por su identificador")
+    @ApiResponses(value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Categoria obtenida"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "No autenticado o token invalido"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "403", description = "Acceso denegado"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "404", description = "Categoria no encontrada")
+    })
     public ResponseEntity<ApiResponse<EntityModel<Categoria>>> obtener(@Parameter(description = "ID de la categoria") @PathVariable Long id) {
         return ResponseEntity.ok(ApiResponse.<EntityModel<Categoria>>builder().success(true).message("Categoria obtenido").data(agregarLinks(service.obtener(id))).build());
     }
@@ -61,6 +79,13 @@ public class CategoriaController {
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Actualizar categoria", description = "Modifica los datos de una categoria existente")
+    @ApiResponses(value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Categoria actualizada"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Solicitud invalida"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "No autenticado o token invalido"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "403", description = "Acceso denegado"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "404", description = "Categoria no encontrada")
+    })
     public ResponseEntity<ApiResponse<EntityModel<Categoria>>> actualizar(@Parameter(description = "ID de la categoria") @PathVariable Long id, @Valid @RequestBody CategoriaDTO dto) {
         return ResponseEntity.ok(ApiResponse.<EntityModel<Categoria>>builder().success(true).message("Categoria actualizado").data(agregarLinks(service.actualizar(id, dto))).build());
     }
@@ -68,6 +93,12 @@ public class CategoriaController {
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Eliminar categoria", description = "Elimina una categoria registrada")
+    @ApiResponses(value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "204", description = "Categoria eliminada"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "No autenticado o token invalido"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "403", description = "Acceso denegado"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "404", description = "Categoria no encontrada")
+    })
     public ResponseEntity<ApiResponse<Void>> eliminar(@Parameter(description = "ID de la categoria") @PathVariable Long id) {
         service.eliminar(id);
         return ResponseEntity
