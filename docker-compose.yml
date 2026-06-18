@@ -155,7 +155,9 @@ services:
     ports:
       - "8080:8080"
     environment:
-      DB_URL: jdbc:mysql://mysql-auth:3306/ms_auth
+      DB_HOST: mysql-auth
+      DB_PORT: 3306
+      DB_NAME: ms_auth
       DB_USER: root
       DB_PASSWORD: root
       JWT_SECRET: producto_super_secreto_especial123456789
@@ -173,7 +175,9 @@ services:
     ports:
       - "8081:8081"
     environment:
-      DB_URL: jdbc:mysql://mysql-empleado:3306/ms_empleado
+      DB_HOST: mysql-empleado
+      DB_PORT: 3306
+      DB_NAME: ms_empleado
       DB_USER: root
       DB_PASSWORD: root
       JWT_SECRET: producto_super_secreto_especial123456789
@@ -192,7 +196,9 @@ services:
     ports:
       - "8082:8082"
     environment:
-      DB_URL: jdbc:mysql://mysql-categoria:3306/ms_categoria
+      DB_HOST: mysql-categoria
+      DB_PORT: 3306
+      DB_NAME: ms_categoria
       DB_USER: root
       DB_PASSWORD: root
       JWT_SECRET: producto_super_secreto_especial123456789
@@ -211,7 +217,9 @@ services:
     ports:
       - "8083:8083"
     environment:
-      DB_URL: jdbc:mysql://mysql-cliente:3306/ms_cliente
+      DB_HOST: mysql-cliente
+      DB_PORT: 3306
+      DB_NAME: ms_cliente
       DB_USER: root
       DB_PASSWORD: root
       JWT_SECRET: producto_super_secreto_especial123456789
@@ -230,7 +238,9 @@ services:
     ports:
       - "8084:8084"
     environment:
-      DB_URL: jdbc:mysql://mysql-producto:3306/ms_producto
+      DB_HOST: mysql-producto
+      DB_PORT: 3306
+      DB_NAME: ms_producto
       DB_USER: root
       DB_PASSWORD: root
       JWT_SECRET: producto_super_secreto_especial123456789
@@ -251,7 +261,9 @@ services:
     ports:
       - "8085:8085"
     environment:
-      DB_URL: jdbc:mysql://mysql-inventario:3306/ms_inventario
+      DB_HOST: mysql-inventario
+      DB_PORT: 3306
+      DB_NAME: ms_inventario
       DB_USER: root
       DB_PASSWORD: root
       JWT_SECRET: producto_super_secreto_especial123456789
@@ -271,7 +283,9 @@ services:
     ports:
       - "8086:8086"
     environment:
-      DB_URL: jdbc:mysql://mysql-carrito:3306/ms_carrito
+      DB_HOST: mysql-carrito
+      DB_PORT: 3306
+      DB_NAME: ms_carrito
       DB_USER: root
       DB_PASSWORD: root
       JWT_SECRET: producto_super_secreto_especial123456789
@@ -294,7 +308,9 @@ services:
     ports:
       - "8087:8087"
     environment:
-      DB_URL: jdbc:mysql://mysql-pedido:3306/ms_pedido
+      DB_HOST: mysql-pedido
+      DB_PORT: 3306
+      DB_NAME: ms_pedido
       DB_USER: root
       DB_PASSWORD: root
       JWT_SECRET: producto_super_secreto_especial123456789
@@ -317,7 +333,9 @@ services:
     ports:
       - "8092:8090"
     environment:
-      DB_URL: jdbc:mysql://mysql-pago:3306/ms_pago
+      DB_HOST: mysql-pago
+      DB_PORT: 3306
+      DB_NAME: ms_pago
       DB_USER: root
       DB_PASSWORD: root
       JWT_SECRET: producto_super_secreto_especial123456789
@@ -337,7 +355,9 @@ services:
     ports:
       - "8091:8091"
     environment:
-      DB_URL: jdbc:mysql://mysql-devolucion:3306/ms_devolucion
+      DB_HOST: mysql-devolucion
+      DB_PORT: 3306
+      DB_NAME: ms_devolucion
       DB_USER: root
       DB_PASSWORD: root
       JWT_SECRET: producto_super_secreto_especial123456789
