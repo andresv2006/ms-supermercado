@@ -1,4 +1,4 @@
-services:
+﻿services:
   mysql-auth:
     image: mysql:8
     container_name: mysql-auth
@@ -153,7 +153,7 @@ services:
     container_name: ms-auth
     restart: unless-stopped
     ports:
-      - "8080:8080"
+      - "8099:8080"
     environment:
       DB_HOST: mysql-auth
       DB_PORT: 3306
@@ -408,4 +408,5 @@ volumes:
   mysql_pedido_data:
   mysql_pago_data:
   mysql_devolucion_data:
+
 
