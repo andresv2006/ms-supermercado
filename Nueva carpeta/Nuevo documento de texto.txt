@@ -1,0 +1,382 @@
+
+
+==================================================
+POSTMAN
+==================================================
+
+==================================================
+1. REGISTRAR USUARIO ADMIN
+==================================================
+
+Metodo:
+POST
+
+URL:
+http://localhost:8099/auth/register
+
+Body:
+
+{
+  "username": "admin1",
+  "password": "admin123",
+  "role": "ROLE_ADMIN"
+}
+
+
+==================================================
+2. LOGIN
+==================================================
+
+Metodo:
+POST
+
+URL:
+http://localhost:8099/auth/login
+
+Body:
+
+{
+  "username": "admin1",
+  "password": "admin123"
+}
+
+Copiar el token de la respuesta.
+
+
+==================================================
+3. USAR TOKEN EN POSTMAN
+==================================================
+
+En cada peticion protegida:
+
+Authorization -> Type -> Bearer Token
+
+Pegar el token recibido en login.
+
+Otra opcion es ir a Headers y poner:
+
+Key:
+Authorization
+
+Value:
+Bearer TU_TOKEN
+
+
+==================================================
+4. CREAR CATEGORIA
+==================================================
+
+Metodo:
+POST
+
+URL:
+http://localhost:8082/api/v1/categorias
+
+Body:
+
+{
+  "nombre": "Abarrotes",
+  "descripcion": "Productos basicos de supermercado",
+  "activo": true
+}
+
+
+==================================================
+5. CREAR EMPLEADO
+==================================================
+
+Metodo:
+POST
+
+URL:
+http://localhost:8081/api/v1/empleados
+
+Body:
+
+{
+  "rut": "12345678-9",
+  "nombre": "Andres",
+  "apellido": "Vargas",
+  "correo": "andres.vargas@supermercado.cl",
+  "telefono": "912345678",
+  "cargo": "Cajero",
+  "turno": "MANANA",
+  "sueldo": 550000,
+  "activo": true
+}
+
+
+==================================================
+6. CREAR CLIENTE
+==================================================
+
+Metodo:
+POST
+
+URL:
+http://localhost:8083/api/v1/clientes
+
+Body:
+
+{
+  "rut": "11111111-1",
+  "nombre": "Camila",
+  "apellido": "Rojas",
+  "correo": "camila.rojas@test.cl",
+  "telefono": "912345678",
+  "direccion": "Av Siempre Viva 123",
+  "activo": true
+}
+
+
+==================================================
+7. CREAR PRODUCTO
+==================================================
+
+IMPORTANTE:
+Usar el id de la categoria creada.
+Normalmente sera 1 si la base de datos esta vacia.
+
+Metodo:
+POST
+
+URL:
+http://localhost:8084/api/v1/productos
+
+Body:
+
+{
+  "sku": "ARR-001",
+  "nombre": "Arroz grado 1",
+  "descripcion": "Bolsa de arroz de 1 kilo",
+  "precio": 1500,
+  "categoriaId": 1,
+  "activo": true
+}
+
+
+==================================================
+8. CREAR INVENTARIO
+==================================================
+
+IMPORTANTE:
+Usar el id del producto creado.
+Normalmente sera 1 si la base de datos esta vacia.
+
+Metodo:
+POST
+
+URL:
+http://localhost:8085/api/v1/inventarios
+
+Body:
+
+{
+  "productoId": 1,
+  "cantidad": 100,
+  "stockMinimo": 10,
+  "ubicacion": "Pasillo 3"
+}
+
+
+==================================================
+9. CREAR CARRITO
+==================================================
+
+IMPORTANTE:
+Usar clienteId y productoId existentes.
+
+Metodo:
+POST
+
+URL:
+http://localhost:8086/api/v1/carritos
+
+Body:
+
+{
+  "clienteId": 1,
+  "estado": "ABIERTO",
+  "items": [
+    {
+      "productoId": 1,
+      "cantidad": 2,
+      "precioUnitario": 1500
+    }
+  ]
+}
+
+
+==================================================
+10. CREAR PEDIDO
+==================================================
+
+Metodo:
+POST
+
+URL:
+http://localhost:8087/api/v1/pedidos
+
+Body:
+
+{
+  "clienteId": 1,
+  "estado": "CREADO",
+  "detalles": [
+    {
+      "productoId": 1,
+      "cantidad": 2,
+      "precioUnitario": 1500
+    }
+  ]
+}
+
+
+==================================================
+11. CREAR PAGO
+==================================================
+
+IMPORTANTE:
+Usar el id del pedido creado.
+Normalmente sera 1 si la base de datos esta vacia.
+
+Metodo:
+POST
+
+URL:
+http://localhost:8092/api/v1/pagos
+
+Body:
+
+{
+  "pedidoId": 1,
+  "metodoPago": "TARJETA",
+  "monto": 3000,
+  "estado": "PENDIENTE"
+}
+
+
+==================================================
+12. CREAR DEVOLUCION
+==================================================
+
+IMPORTANTE:
+Usar pedidoId y pagoId existentes.
+
+Metodo:
+POST
+
+URL:
+http://localhost:8091/api/v1/devoluciones
+
+Body:
+
+{
+  "pedidoId": 1,
+  "pagoId": 1,
+  "motivo": "Producto defectuoso",
+  "estado": "SOLICITADA"
+}
+
+
+==================================================
+GET PARA COMPROBAR DATOS
+==================================================
+
+Categorias:
+GET http://localhost:8082/api/v1/categorias
+
+Empleados:
+GET http://localhost:8081/api/v1/empleados
+
+Clientes:
+GET http://localhost:8083/api/v1/clientes
+
+Productos:
+GET http://localhost:8084/api/v1/productos
+
+Inventarios:
+GET http://localhost:8085/api/v1/inventarios
+
+Carritos:
+GET http://localhost:8086/api/v1/carritos
+
+Pedidos:
+GET http://localhost:8087/api/v1/pedidos
+
+Pagos:
+GET http://localhost:8092/api/v1/pagos
+
+Devoluciones:
+GET http://localhost:8091/api/v1/devoluciones
+
+
+==================================================
+SWAGGER
+==================================================
+
+
+ms-auth:
+http://localhost:8099/swagger-ui.html
+
+ms-empleado:
+http://localhost:8081/swagger-ui.html
+
+ms-categoria:
+http://localhost:8082/swagger-ui.html
+
+ms-cliente:
+http://localhost:8083/swagger-ui.html
+
+ms-producto:
+http://localhost:8084/swagger-ui.html
+
+ms-inventario:
+http://localhost:8085/swagger-ui.html
+
+ms-carrito:
+http://localhost:8086/swagger-ui.html
+
+ms-pedido:
+http://localhost:8087/swagger-ui.html
+
+ms-devolucion:
+http://localhost:8091/swagger-ui.html
+
+ms-pago:
+http://localhost:8092/swagger-ui.html
+
+
+==================================================
+PASO A PASO EN SWAGGER
+==================================================
+
+1. Abrir el link Swagger del microservicio.
+   Ejemplo:
+   http://localhost:8082/swagger-ui.html
+
+2. Buscar el controller.
+   Ejemplo:
+   categoria-controller
+
+3. Abrir el endpoint que se quiere probar.
+   Ejemplo:
+   POST /api/v1/categorias
+
+4. Presionar:
+   Try it out
+
+5. Pegar el body JSON.
+
+6. Presionar:
+   Execute
+
+7. Revisar la respuesta abajo.
+
+8. Para endpoints protegidos, usar el boton Authorize si aparece.
+
+9. En Authorize pegar:
+   Bearer TU_TOKEN
+
+10. Repetir las pruebas con GET, POST, PUT o DELETE.
+
