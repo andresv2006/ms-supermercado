@@ -1,5 +1,3 @@
-
-
 ==================================================
 POSTMAN
 ==================================================
@@ -39,27 +37,6 @@ Body:
   "username": "admin1",
   "password": "admin123"
 }
-
-Copiar el token de la respuesta.
-
-
-==================================================
-3. USAR TOKEN EN POSTMAN
-==================================================
-
-En cada peticion protegida:
-
-Authorization -> Type -> Bearer Token
-
-Pegar el token recibido en login.
-
-Otra opcion es ir a Headers y poner:
-
-Key:
-Authorization
-
-Value:
-Bearer TU_TOKEN
 
 
 ==================================================
@@ -244,7 +221,7 @@ Metodo:
 POST
 
 URL:
-http://localhost:8092/api/v1/pagos
+http://localhost:8088/api/v1/pagos
 
 Body:
 
@@ -305,7 +282,7 @@ Pedidos:
 GET http://localhost:8087/api/v1/pedidos
 
 Pagos:
-GET http://localhost:8092/api/v1/pagos
+GET http://localhost:8088/api/v1/pagos
 
 Devoluciones:
 GET http://localhost:8091/api/v1/devoluciones
@@ -314,7 +291,6 @@ GET http://localhost:8091/api/v1/devoluciones
 ==================================================
 SWAGGER
 ==================================================
-
 
 ms-auth:
 http://localhost:8099/swagger-ui.html
@@ -340,11 +316,11 @@ http://localhost:8086/swagger-ui.html
 ms-pedido:
 http://localhost:8087/swagger-ui.html
 
+ms-pago:
+http://localhost:8088/swagger-ui.html
+
 ms-devolucion:
 http://localhost:8091/swagger-ui.html
-
-ms-pago:
-http://localhost:8092/swagger-ui.html
 
 
 ==================================================
@@ -379,4 +355,3 @@ PASO A PASO EN SWAGGER
    Bearer TU_TOKEN
 
 10. Repetir las pruebas con GET, POST, PUT o DELETE.
-
