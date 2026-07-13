@@ -1,4 +1,4 @@
-﻿services:
+services:
   mysql-auth:
     image: mysql:8
     container_name: mysql-auth
@@ -10,6 +10,11 @@
       - "3307:3306"
     volumes:
       - mysql_auth_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     networks:
       - backend-network
 
@@ -24,6 +29,11 @@
       - "3309:3306"
     volumes:
       - mysql_empleado_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     networks:
       - backend-network
 
@@ -38,6 +48,11 @@
       - "3308:3306"
     volumes:
       - mysql_categoria_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     networks:
       - backend-network
 
@@ -52,6 +67,11 @@
       - "3311:3306"
     volumes:
       - mysql_cliente_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     networks:
       - backend-network
 
@@ -66,6 +86,11 @@
       - "3312:3306"
     volumes:
       - mysql_producto_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     networks:
       - backend-network
 
@@ -80,6 +105,11 @@
       - "3313:3306"
     volumes:
       - mysql_inventario_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     networks:
       - backend-network
 
@@ -94,6 +124,11 @@
       - "3310:3306"
     volumes:
       - mysql_carrito_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     networks:
       - backend-network
 
@@ -108,6 +143,11 @@
       - "3314:3306"
     volumes:
       - mysql_pedido_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     networks:
       - backend-network
 
@@ -122,6 +162,11 @@
       - "3315:3306"
     volumes:
       - mysql_pago_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     networks:
       - backend-network
 
@@ -136,6 +181,11 @@
       - "3316:3306"
     volumes:
       - mysql_devolucion_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     networks:
       - backend-network
 
@@ -163,8 +213,10 @@
       JWT_SECRET: producto_super_secreto_especial123456789
       EUREKA_URL: http://ms-eureka:8761/eureka/
     depends_on:
-      - mysql-auth
-      - ms-eureka
+      mysql-auth:
+        condition: service_healthy
+      ms-eureka:
+        condition: service_started
     networks:
       - backend-network
 
@@ -183,9 +235,12 @@
       JWT_SECRET: producto_super_secreto_especial123456789
       EUREKA_URL: http://ms-eureka:8761/eureka/
     depends_on:
-      - mysql-empleado
-      - ms-eureka
-      - ms-auth
+      mysql-empleado:
+        condition: service_healthy
+      ms-eureka:
+        condition: service_started
+      ms-auth:
+        condition: service_started
     networks:
       - backend-network
 
@@ -204,9 +259,12 @@
       JWT_SECRET: producto_super_secreto_especial123456789
       EUREKA_URL: http://ms-eureka:8761/eureka/
     depends_on:
-      - mysql-categoria
-      - ms-eureka
-      - ms-auth
+      mysql-categoria:
+        condition: service_healthy
+      ms-eureka:
+        condition: service_started
+      ms-auth:
+        condition: service_started
     networks:
       - backend-network
 
@@ -225,9 +283,12 @@
       JWT_SECRET: producto_super_secreto_especial123456789
       EUREKA_URL: http://ms-eureka:8761/eureka/
     depends_on:
-      - mysql-cliente
-      - ms-eureka
-      - ms-auth
+      mysql-cliente:
+        condition: service_healthy
+      ms-eureka:
+        condition: service_started
+      ms-auth:
+        condition: service_started
     networks:
       - backend-network
 
@@ -247,10 +308,14 @@
       EUREKA_URL: http://ms-eureka:8761/eureka/
       CATEGORIA_SERVICE_URL: http://ms-categoria:8082/api/v1/categorias/
     depends_on:
-      - mysql-producto
-      - ms-eureka
-      - ms-auth
-      - ms-categoria
+      mysql-producto:
+        condition: service_healthy
+      ms-eureka:
+        condition: service_started
+      ms-auth:
+        condition: service_started
+      ms-categoria:
+        condition: service_started
     networks:
       - backend-network
 
@@ -269,10 +334,14 @@
       JWT_SECRET: producto_super_secreto_especial123456789
       EUREKA_URL: http://ms-eureka:8761/eureka/
     depends_on:
-      - mysql-inventario
-      - ms-eureka
-      - ms-auth
-      - ms-producto
+      mysql-inventario:
+        condition: service_healthy
+      ms-eureka:
+        condition: service_started
+      ms-auth:
+        condition: service_started
+      ms-producto:
+        condition: service_started
     networks:
       - backend-network
 
@@ -293,11 +362,16 @@
       CLIENTE_SERVICE_URL: http://ms-cliente:8083/api/v1/clientes/
       PRODUCTO_SERVICE_URL: http://ms-producto:8084/api/v1/productos/
     depends_on:
-      - mysql-carrito
-      - ms-eureka
-      - ms-auth
-      - ms-cliente
-      - ms-producto
+      mysql-carrito:
+        condition: service_healthy
+      ms-eureka:
+        condition: service_started
+      ms-auth:
+        condition: service_started
+      ms-cliente:
+        condition: service_started
+      ms-producto:
+        condition: service_started
     networks:
       - backend-network
 
@@ -318,11 +392,16 @@
       CLIENTE_SERVICE_URL: http://ms-cliente:8083/api/v1/clientes/
       PRODUCTO_SERVICE_URL: http://ms-producto:8084/api/v1/productos/
     depends_on:
-      - mysql-pedido
-      - ms-eureka
-      - ms-auth
-      - ms-cliente
-      - ms-producto
+      mysql-pedido:
+        condition: service_healthy
+      ms-eureka:
+        condition: service_started
+      ms-auth:
+        condition: service_started
+      ms-cliente:
+        condition: service_started
+      ms-producto:
+        condition: service_started
     networks:
       - backend-network
 
@@ -331,7 +410,7 @@
     container_name: ms-pago
     restart: unless-stopped
     ports:
-      - "8092:8090"
+      - "8088:8090"
     environment:
       DB_HOST: mysql-pago
       DB_PORT: 3306
@@ -341,10 +420,14 @@
       JWT_SECRET: producto_super_secreto_especial123456789
       EUREKA_URL: http://ms-eureka:8761/eureka/
     depends_on:
-      - mysql-pago
-      - ms-eureka
-      - ms-auth
-      - ms-pedido
+      mysql-pago:
+        condition: service_healthy
+      ms-eureka:
+        condition: service_started
+      ms-auth:
+        condition: service_started
+      ms-pedido:
+        condition: service_started
     networks:
       - backend-network
 
@@ -363,11 +446,16 @@
       JWT_SECRET: producto_super_secreto_especial123456789
       EUREKA_URL: http://ms-eureka:8761/eureka/
     depends_on:
-      - mysql-devolucion
-      - ms-eureka
-      - ms-auth
-      - ms-pedido
-      - ms-pago
+      mysql-devolucion:
+        condition: service_healthy
+      ms-eureka:
+        condition: service_started
+      ms-auth:
+        condition: service_started
+      ms-pedido:
+        condition: service_started
+      ms-pago:
+        condition: service_started
     networks:
       - backend-network
 
@@ -380,17 +468,28 @@
     environment:
       EUREKA_URL: http://ms-eureka:8761/eureka/
     depends_on:
-      - ms-eureka
-      - ms-auth
-      - ms-empleado
-      - ms-categoria
-      - ms-cliente
-      - ms-producto
-      - ms-inventario
-      - ms-carrito
-      - ms-pedido
-      - ms-pago
-      - ms-devolucion
+      ms-eureka:
+        condition: service_started
+      ms-auth:
+        condition: service_started
+      ms-empleado:
+        condition: service_started
+      ms-categoria:
+        condition: service_started
+      ms-cliente:
+        condition: service_started
+      ms-producto:
+        condition: service_started
+      ms-inventario:
+        condition: service_started
+      ms-carrito:
+        condition: service_started
+      ms-pedido:
+        condition: service_started
+      ms-pago:
+        condition: service_started
+      ms-devolucion:
+        condition: service_started
     networks:
       - backend-network
 
@@ -408,5 +507,3 @@ volumes:
   mysql_pedido_data:
   mysql_pago_data:
   mysql_devolucion_data:
-
-
